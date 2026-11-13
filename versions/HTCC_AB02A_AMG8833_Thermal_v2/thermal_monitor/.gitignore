@@ -1,0 +1,30 @@
+# ── Credenciales ─────────────────────────────────────────
+# config.json puede contener credenciales reales del broker MQTT.
+# Se versiona SOLO config.example.json (plantilla sin secretos).
+config.json
+
+# ── Logs / temporales ────────────────────────────────────
+*.log
+*.err.log
+sim.log
+sim2.log
+sim.err.log
+sim2.err.log
+
+# ── Python ───────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+*.egg-info/
+
+# ── Backups de versiones previas (pueden contener credenciales) ──
+backup_versiones/
+
+# ── Sistema / editor ─────────────────────────────────────
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

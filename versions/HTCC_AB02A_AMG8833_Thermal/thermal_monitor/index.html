@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termocámara LoRaWAN AMG8833</title>
+<style>
+  :root {
+    --bg: #0f1420;
+    --panel: #1a2130;
+    --panel2: #222b3d;
+    --border: #2e3a4f;
+    --text: #e8edf5;
+    --muted: #93a0b5;
+    --accent: #2dd4bf;
+    --warn: #f59e0b;
+    --err: #ef4444;
+    --ok: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    padding: 24px;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  h1 { font-size: 22px; font-weight: 600; }
+  h1 span { color: var(--accent); }
+  #conn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+  }
+  #dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  #dot.off { background: var(--err); box-shadow: 0 0 8px var(--err); }
+  #dot.wait { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+
+  .grid { display: grid; grid-template-columns: 1fr 340px; gap: 20px; max-width: 1200px; margin: 0 auto; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+  .card h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; font-weight: 600; }
+
+  /* Vista */
+  .views {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+    background: var(--panel2);
+    padding: 5px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .views button {
+    flex: 1;
+    padding: 9px 6px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .views button.active { background: var(--accent); color: #062521; }
+  .views button:not(.active):hover { background: var(--border); color: var(--text); }
+
+  #heatWrap { position: relative; }
+  #heat {
+    width: 28%;
+    margin: 0 auto;
+    display: block;
+    aspect-ratio: 9/16;
+    border-radius: 10px;
+    background: #000;
+  }
+  #scale { width: 100%; height: 12px; margin-top: 12px; border-radius: 6px; background: linear-gradient(90deg, rgb(35,40,130), rgb(45,80,175), rgb(35,130,175), rgb(35,160,150), rgb(70,180,100), rgb(130,190,70), rgb(200,195,55), rgb(240,200,45), rgb(255,175,35), rgb(255,140,22), rgb(255,105,20), rgb(255,55,18), rgb(255,25,35)); opacity: .9; }
+  .scaleRow { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* Umbral (solo vista combinada) */
+  .threshold { margin-top: 14px; display: none; }
+  .threshold.visible { display: block; }
+  .threshold label { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .threshold input[type=range] { width: 100%; accent-color: var(--warn); }
+  .threshold .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 12px; }
+  .stat .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat .value { font-size: 20px; font-weight: 700; margin-top: 4px; }
+  .stat .value small { font-size: 13px; color: var(--muted); font-weight: 400; }
+  .stat.temp .value { font-size: 34px; }
+  .stat.temp .value small { font-size: 18px; }
+  .stat.temp .label { color: var(--accent); }
+  #pixmax { color: #ff5a5a; }
+  #pixmin { color: #4da6ff; }
+  .full { grid-column: 1 / -1; }
+  .ok { color: var(--ok); }
+  .bad { color: var(--err); }
+  #sensorStatus { font-size: 14px; font-weight: 600; }
+  #devEui { color: var(--muted); font-family: monospace; }
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 22px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Termocámara <span>AMG8833</span> · LoRaWAN</h1>
+    <div id="conn"><span id="dot" class="wait"></span><span id="connText">Conectando...</span></div>
+  </header>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Cámara</h2>
+      <div class="views">
+        <button data-view="optical" class="active">Vista óptica</button>
+        <button data-view="thermal">Vista térmica</button>
+        <button data-view="combined">Combinada</button>
+      </div>
+      <div id="heatWrap">
+        <canvas id="heat" width="9" height="16"></canvas>
+      </div>
+      <div id="scale"></div>
+      <div class="scaleRow">
+        <span id="minLabel">--°C</span>
+        <span>min / max</span>
+        <span id="maxLabel">--°C</span>
+      </div>
+      <div class="threshold" id="threshold">
+        <label><span>Umbral de calor (solo colores cálidos)</span><span id="thVal">60%</span></label>
+        <input type="range" id="thRange" min="0" max="100" value="60">
+        <div class="hint">Bajo este nivel no se muestra color; solo los puntos por encima se tiñen de amarillo/naranja/rojo. Sube el valor para ver menos calor.</div>
+      </div>
+    </div>
+
+    <div class="gridcol">
+      <div class="card">
+        <h2>Datos del sensor</h2>
+        <div class="stats">
+          <div class="stat"><div class="label">Temp. termistor</div><div class="value" id="thermistor">--<small> °C</small></div></div>
+          <div class="stat temp"><div class="label">Máx. matriz</div><div class="value" id="pixmax">--<small> °C</small></div></div>
+          <div class="stat temp"><div class="label">Mín. matriz</div><div class="value" id="pixmin">--<small> °C</small></div></div>
+          <div class="stat"><div class="label">Batería</div><div class="value" id="battery">--<small></small></div></div>
+          <div class="stat full"><div class="label">Estado del sensor</div><div id="sensorStatus" class="ok">Esperando datos...</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Información</h2>
+        <div class="stats">
+          <div class="stat full"><div class="label">Dispositivo (DevEUI)</div><div id="devEui">70b3d56f27cee98b</div></div>
+          <div class="stat"><div class="label">Última actualización</div><div class="value" id="updated" style="font-size:14px">--</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Datos vía MQTT ← Milesight UG56 ← nodo CubeCell + AMG8833 · Fondo: fotografía real</footer>
+
+<script>
+const TURBO = [
+  [48,18,59],[50,21,67],[51,24,74],[52,27,81],[53,30,88],[54,33,95],[55,36,102],
+  [56,39,108],[57,42,115],[58,45,121],[59,48,128],[60,51,134],[61,54,140],[62,57,146],
+  [63,60,151],[64,63,156],[64,66,162],[64,69,167],[64,72,172],[64,75,177],[64,78,181],
+  [64,81,186],[64,84,190],[64,87,194],[64,90,198],[64,93,201],[63,96,205],[63,99,208],
+  [62,102,211],[61,105,214],[61,108,217],[60,111,219],[59,114,222],[58,117,224],[57,120,226],
+  [55,123,228],[54,126,230],[53,129,231],[52,132,233],[50,135,234],[49,138,235],[47,141,236],
+  [46,144,237],[44,147,238],[43,150,238],[41,153,239],[40,156,240],[38,159,240],[36,162,240],
+  [35,164,241],[33,167,241],[32,170,241],[31,172,242],[29,175,242],[28,178,242],[27,180,242],
+  [26,183,242],[25,185,242],[24,188,242],[23,190,242],[23,192,242],[22,195,242],[22,197,242],
+  [22,199,241],[21,201,241],[21,203,241],[21,205,240],[21,207,240],[22,209,239],[22,211,238],
+  [23,213,238],[24,215,237],[25,217,236],[26,218,235],[28,220,234],[30,222,232],[32,224,231],
+  [35,225,230],[38,227,228],[41,228,227],[44,230,225],[48,231,223],[51,232,221],[55,234,219],
+  [60,235,217],[64,236,215],[68,237,212],[73,238,210],[78,239,207],[83,240,205],[88,241,202],
+  [93,242,200],[99,243,197],[104,244,194],[110,244,192],[115,245,189],[121,246,186],[126,247,184],
+  [132,248,181],[137,248,179],[143,249,176],[149,250,174],[154,250,171],[160,251,169],[166,252,167],
+  [171,252,164],[177,253,162],[182,253,160],[188,254,158],[193,254,156],[199,254,154],[204,254,152],
+  [209,254,150],[214,254,148],[219,254,146],[224,254,144],[229,254,142],[234,254,140],[239,254,138],
+  [244,254,136],[248,254,134],[252,253,132],[255,252,130],[255,250,128],[255,249,126],[255,247,124],
+  [255,245,122],[255,243,120],[255,241,118],[255,239,116],[255,237,114],[255,235,112],[255,233,110],
+  [255,230,108],[255,228,106],[255,226,104],[255,224,102],[255,221,100],[255,219,98],[255,216,96],
+  [255,214,94],[255,211,92],[255,208,90],[255,206,88],[255,203,86],[255,200,84],[255,197,82],
+  [255,194,80],[255,191,78],[255,188,76],[255,185,74],[255,182,72],[255,178,70],[255,175,68],
+  [255,172,66],[255,168,64],[255,165,62],[255,161,60],[255,158,58],[255,154,56],[255,150,54],
+  [255,147,52],[255,143,50],[255,139,48],[255,135,46],[255,131,44],[255,127,42],[255,123,40],
+  [255,119,38],[255,115,36],[255,111,34],[255,107,32],[255,103,30],[255,99,28],[255,95,26],
+  [255,91,24],[255,87,22],[255,83,20],[255,79,18],[254,75,16],[254,71,14],[254,67,12],
+  [253,63,11],[252,59,10],[251,55,9],[250,51,8],[249,47,7],[248,43,6],[247,39,5],
+  [246,35,4],[245,30,4],[244,26,3],[243,22,3],[242,18,2],[241,14,2],[240,10,2]
+];
+
+const heat = document.getElementById('heat');
+const ctx = heat.getContext('2d');
+const S = 8;
+const BUF_W = 560; // resolución del buffer (nítida), aspecto de la foto
+const BUF_H = Math.round(BUF_W * 1366 / 768);
+
+function frameCanvas() {
+  if (heat.width !== BUF_W || heat.height !== BUF_H) {
+    heat.width = BUF_W;
+    heat.height = BUF_H;
+  }
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+}
+
+let view = 'optical'; // optical | thermal | combined
+let threshold = 60;    // % para the combined
+let basePhoto = null;  // ImageData 8x8 de la foto (para la combinada)
+
+// ---- Cargar la fotografía real ----
+const photoImg = new Image();
+let photoReady = false;
+photoImg.onload = () => {
+  photoReady = true;
+  // Versión 8x8 (ids de píxel) para mezclar celda a celda en la combinada
+  const g = document.createElement('canvas');
+  g.width = S; g.height = S;
+  g.getContext('2d').drawImage(photoImg, 0, 0, S, S);
+  basePhoto = g.getContext('2d').getImageData(0,0,S,S);
+  // si hay un frame guardado, redibuja la vista actual al nitido
+  if (lastFrame) render(lastFrame);
+  else drawPhotoOnly();
+};
+photoImg.src = '/fondo2.jpg';
+
+// Mapa termico clasico equilibrado: el rojo se carga SOLO en los valores
+// altos (el punto mas caliente), naranja/amarillo en el rango medio-alto,
+// y azul/verde dominan las temperaturas bajas. Por eso una taza caliente
+// solo se ve roja en su centro mas caliente, no toda entera.
+// Paleta SOLO calida (amarillo -> naranja -> rojo). Se aplica unicamente a
+// los pixeles por encima del umbral; por debajo queda sin color (transparente),
+// de modo que las temperaturas bajas no aparecen en absoluto y solo se ve
+// rojo/naranja/amarillo donde hay calor real.
+const WARM = [
+  [245, 220, 40],  // amarillo (justo en el umbral)
+  [252, 180, 30],  // amarillo-naranja
+  [255, 140, 22],  // naranja
+  [255, 100, 20],  // rojo-naranja
+  [255, 60, 15],   // rojo
+  [255, 25, 35]    // rojo brillante (valor maximo)
+];
+
+// Devuelve el color calido para t si t >= tCut, o null (sin color) si es frio.
+function colorFor(t, tCut, max) {
+  if (t < tCut || max <= tCut) return null;
+  const n = (t - tCut) / (max - tCut);
+  const pos = n * (WARM.length - 1);
+  const i = Math.max(0, Math.min(WARM.length - 2, Math.floor(pos)));
+  const f = pos - i;
+  const a = WARM[i], b = WARM[i+1];
+  return [
+    Math.round(a[0] + (b[0]-a[0])*f),
+    Math.round(a[1] + (b[1]-a[1])*f),
+    Math.round(a[2] + (b[2]-a[2])*f)
+  ];
+}
+
+// Devuelve un canvas 8x8 con el coloreado de la capa termica.
+// mode: 'full' -> mapa termico (los frios quedan transparentes, los calientes calidos)
+//       'hot'  -> igual, para superponer sobre la foto (misma logica)
+function thermalLayer(frame, mode) {
+  const px = frame.pixels_C;
+  const min = frame.pixel_min_C;
+  const max = frame.pixel_max_C;
+  const tCut = min + (threshold/100)*(max-min);
+  const c = document.createElement('canvas');
+  c.width = S; c.height = S;
+  const g = c.getContext('2d');
+  const img = g.createImageData(S, S);
+  for (let y=0; y<S; y++) {
+    for (let x=0; x<S; x++) {
+      const i = (y*S+x)*4;
+      const t = px[y*S+x];
+      const col = colorFor(t, tCut, max);
+      if (col) {
+        img.data[i]=col[0]; img.data[i+1]=col[1]; img.data[i+2]=col[2]; img.data[i+3]=255;
+      } else {
+        img.data[i]=0; img.data[i+1]=0; img.data[i+2]=0; img.data[i+3]=0;
+      }
+    }
+  }
+  g.putImageData(img, 0, 0);
+  return c;
+}
+
+function drawPhotoOnly() {
+  frameCanvas();
+  ctx.clearRect(0,0,heat.width,heat.height);
+  if (photoReady) {
+    ctx.drawImage(photoImg, 0, 0, heat.width, heat.height);
+  } else {
+    ctx.fillStyle = '#333'; ctx.fillRect(0,0,heat.width,heat.height);
+  }
+}
+
+function updateStats(frame) {
+  document.getElementById('minLabel').textContent = frame.pixel_min_C.toFixed(1)+'°C';
+  document.getElementById('maxLabel').textContent = frame.pixel_max_C.toFixed(1)+'°C';
+  document.getElementById('thermistor').innerHTML = (frame.thermistor_C!=null?frame.thermistor_C.toFixed(1):'--')+'<small> °C</small>';
+  document.getElementById('pixmax').innerHTML = frame.pixel_max_C.toFixed(1)+'<small> °C</small>';
+  document.getElementById('pixmin').innerHTML = frame.pixel_min_C.toFixed(1)+'<small> °C</small>';
+  const b = (frame.battery_V!=null)?(frame.battery_V.toFixed(2)+' V'):((frame.battery_mV!=null)?frame.battery_mV+' mV':'--');
+  document.getElementById('battery').innerHTML = b+'<small></small>';
+  const st = document.getElementById('sensorStatus');
+  if (frame.sensor_ok) { st.textContent='OK — sensor operativo'; st.className='ok'; }
+  else { st.textContent='FALLO de lectura del sensor'; st.className='bad'; }
+  if (frame.dev_eui) document.getElementById('devEui').textContent = frame.dev_eui;
+  document.getElementById('updated').textContent = new Date().toLocaleTimeString();
+}
+
+function render(frame) {
+  frameCanvas();
+
+  if (view === 'optical') {
+    drawPhotoOnly();
+  } else if (view === 'thermal') {
+    ctx.clearRect(0,0,heat.width,heat.height);
+    const layer = thermalLayer(frame, 'full');
+    ctx.drawImage(layer, 0, 0, S, S, 0, 0, heat.width, heat.height);
+  } else {
+    // combined: foto nítida de fondo + puntos calientes encima
+    ctx.clearRect(0,0,heat.width,heat.height);
+    if (photoReady) ctx.drawImage(photoImg, 0, 0, heat.width, heat.height);
+    const hot = thermalLayer(frame, 'hot');
+    ctx.globalAlpha = 0.85; // tintes calientes semitransparentes
+    ctx.drawImage(hot, 0, 0, S, S, 0, 0, heat.width, heat.height);
+    ctx.globalAlpha = 1.0;
+  }
+
+  updateStats(frame);
+}
+
+// ---- Botones de vista ----
+document.querySelectorAll('.views button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.views button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    view = btn.dataset.view;
+    document.getElementById('threshold').classList.toggle('visible', view==='thermal' || view==='combined');
+    // re-render si ya hay datos
+    if (lastFrame) render(lastFrame);
+  });
+});
+
+// ---- Umbral ----
+const thRange = document.getElementById('thRange');
+thRange.addEventListener('input', () => {
+  threshold = +thRange.value;
+  document.getElementById('thVal').textContent = threshold+'%';
+  if (lastFrame && (view==='thermal' || view==='combined')) render(lastFrame);
+});
+
+let lastFrame = null;
+
+// ---- WebSocket ----
+let ws;
+function connect() {
+  const proto = location.protocol==='https:'?'wss':'ws';
+  ws = new WebSocket(`${proto}://${location.host}/ws`);
+  const dot = document.getElementById('dot');
+  const txt = document.getElementById('connText');
+  ws.onopen = () => { dot.className='ok'; txt.textContent='Conectado (en espera de datos)'; };
+  ws.onmessage = (e) => {
+    const frame = JSON.parse(e.data);
+    lastFrame = frame;
+    dot.className='ok'; txt.textContent='Recibiendo datos en tiempo real';
+    render(frame);
+  };
+  ws.onclose = () => { dot.className='off'; txt.textContent='Desconectado — reintentando...'; setTimeout(connect,2000); };
+  ws.onerror = () => ws.close();
+}
+connect();
+</script>
+</body>
+</html>

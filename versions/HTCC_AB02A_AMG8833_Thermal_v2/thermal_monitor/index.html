@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Termocámara LoRaWAN AMG8833</title>
+<style>
+  :root {
+    --bg: #0f1420;
+    --panel: #1a2130;
+    --panel2: #222b3d;
+    --border: #2e3a4f;
+    --text: #e8edf5;
+    --muted: #93a0b5;
+    --accent: #2dd4bf;
+    --warn: #f59e0b;
+    --err: #ef4444;
+    --ok: #22c55e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+  h1 { font-size: 22px; font-weight: 600; }
+  h1 span { color: var(--accent); }
+  #conn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+  }
+  #dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  #dot.off { background: var(--err); box-shadow: 0 0 8px var(--err); }
+  #dot.wait { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+
+  .grid { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 640px; gap: 14px; min-height: 0; }
+  @media (max-width: 900px) { body { overflow: auto; } .grid, .layout { grid-template-columns: 1fr; height: auto; } }
+
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; min-height: 0; }
+  .card h2 { font-size: 18px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; font-weight: 600; }
+  .card-spaced { margin-top: 0; }
+
+  /* Resplandor sutil del borde de "Datos del sensor" al llegar data */
+  #sensorCard { transition: box-shadow .6s ease-out; }
+  #sensorCard.live { animation: cardGlow 1.1s ease-out; }
+  @keyframes cardGlow {
+    0%   { box-shadow: 0 0 0 0 rgba(255,184,77,0); }
+    18%  { box-shadow: 0 0 16px 1px rgba(255,184,77,.5), inset 0 0 10px rgba(255,184,77,.12); }
+    100% { box-shadow: 0 0 0 0 rgba(255,184,77,0); }
+  }
+
+  /* Vista */
+  .views {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+    background: var(--panel2);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .views button {
+    flex: 1;
+    padding: 7px 6px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .views button.active { background: var(--accent); color: #062521; }
+  .views button:not(.active):hover { background: var(--border); color: var(--text); }
+
+  #heatWrap { position: relative; flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; }
+  #glow {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 14px;
+    pointer-events: none;
+    box-shadow: inset 0 0 0 2px var(--accent), 0 0 18px 2px rgba(45,212,191,0.0), 0 0 34px 6px rgba(45,212,191,0.0);
+    opacity: 0;
+    transition: opacity .5s ease;
+  }
+  #glow.flash .ring {
+    animation: glowPulse .7s ease-out;
+  }
+  #glow .ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    box-shadow: 0 0 16px 2px rgba(45,212,191,.85), 0 0 34px 9px rgba(45,212,191,.4);
+    opacity: 0;
+  }
+  @keyframes glowPulse {
+    0%   { opacity: 0; }
+    25%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  #heat {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    aspect-ratio: 9/16;
+    border-radius: 10px;
+    background: #000;
+    position: relative;
+    z-index: 1;
+  }
+  #scale { width: 100%; height: 10px; margin-top: 8px; border-radius: 6px; background: linear-gradient(90deg, rgb(35,40,130), rgb(45,80,175), rgb(35,130,175), rgb(35,160,150), rgb(70,180,100), rgb(130,190,70), rgb(200,195,55), rgb(240,200,45), rgb(255,175,35), rgb(255,140,22), rgb(255,105,20), rgb(255,55,18), rgb(255,25,35)); opacity: .9; }
+  .scaleRow { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 3px; }
+
+  /* Umbral (solo vista combinada) */
+  .threshold { margin-top: 8px; display: none; }
+  .threshold.visible { display: block; }
+  .threshold label { font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .threshold input[type=range] { width: 100%; accent-color: var(--warn); }
+  .threshold .hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat { background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; position: relative; }
+  .stat .label { font-size: 15px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat .value { font-size: 28px; font-weight: 700; margin-top: 4px; }
+  .stat .value small { font-size: 17px; color: var(--muted); font-weight: 400; }
+
+  /* Semáforo de señal (punto arriba-derecha de las tarjetas RSSI/SNR) */
+  .sig-dot {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #4a4a4a;
+    border: 1px solid rgba(255,255,255,.14);
+    transition: background .3s, box-shadow .3s;
+  }
+  .sig-dot.grn { background: #22c55e; box-shadow: 0 0 8px 1px rgba(34,197,94,.7); }
+  .sig-dot.yel { background: #eab308; box-shadow: 0 0 8px 1px rgba(234,179,8,.7); }
+  .sig-dot.red { background: #ef4444; box-shadow: 0 0 8px 1px rgba(239,68,68,.7); }
+  .stat.temp .value { font-size: 44px; }
+  .stat.temp .value small { font-size: 22px; }
+  .stat.temp .label { color: var(--accent); }
+  #pixmax { color: #ff5a5a; }
+  #pixmin { color: #4da6ff; }
+  .full { grid-column: 1 / -1; }
+  .ok { color: var(--ok); }
+  .bad { color: var(--err); }
+  #sensorStatus { font-size: 20px; font-weight: 600; }
+  #devEui { color: var(--muted); font-family: monospace; font-size: 24px; }
+  .card-spaced .stat .label { font-size: 17px; }
+  .dl-buttons { display: flex; gap: 8px; margin-top: 8px; }
+  .dl-btn {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--panel2);
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s;
+  }
+  .dl-btn:hover:not(:disabled) { background: var(--accent); color: #062521; border-color: var(--accent); }
+  .dl-btn:disabled { opacity: .45; cursor: not-allowed; }
+  .dl-result { margin-top: 10px; font-size: 12px; color: var(--muted); min-height: 14px; }
+
+  /* ---- Layout multi-nodo: árbol de dispositivos + panel ---- */
+  .layout { flex: 1; min-height: 0; display: grid; grid-template-columns: 460px 1fr; gap: 14px; }
+  @media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
+  .main { min-width: 0; min-height: 0; display: flex; }
+  .devPanel { align-self: stretch; overflow-y: auto; min-height: 0; }
+  .dev-empty { color: var(--muted); font-size: 18px; padding: 10px 0; }
+  .dev-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 20px; margin-bottom: 11px;
+    border: 1px solid var(--border); border-radius: 10px;
+    background: var(--panel2); cursor: pointer;
+    transition: all .15s;
+  }
+  .dev-item:hover { border-color: #41506b; }
+  .dev-item.active { border-color: var(--accent); background: rgba(45,212,191,.08); box-shadow: 0 0 12px rgba(45,212,191,.18); }
+  .dev-item.pulse .dev-dot { animation: devPulse .8s ease-out; }
+  @keyframes devPulse {
+    0% { box-shadow: 0 0 0 0 rgba(45,212,191,.7); }
+    100% { box-shadow: 0 0 0 10px rgba(45,212,191,0); }
+  }
+  .dev-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+  .dev-dot.online { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  .dev-dot.offline { background: var(--err); box-shadow: 0 0 8px var(--err); }
+  .dev-dot.wait { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+  .dev-info { flex: 1; min-width: 0; }
+  .dev-name { font-size: 24px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dev-eui { font-size: 18px; color: var(--muted); font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dev-meta { font-size: 18px; color: var(--muted); text-align: right; flex-shrink: 0; }
+  .dev-meta .m-batt { display: block; }
+  .camName { text-transform: none; color: var(--accent); letter-spacing: 0; font-size: 13px; margin-left: 8px; }
+
+  .gridcol { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 14px; min-height: 0; }
+  @media (max-height: 640px) { body { overflow: auto; } }
+
+  footer { flex-shrink: 0; text-align: center; color: var(--muted); font-size: 12px; margin-top: 10px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Device <span>View</span></h1>
+    <div id="conn"><span id="dot" class="wait"></span><span id="connText">Conectando...</span></div>
+  </header>
+
+  <div class="layout">
+    <aside class="card devPanel">
+      <h2>Dispositivos</h2>
+      <div id="devTree">
+        <div class="dev-empty">Esperando nodos...</div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <div class="grid">
+    <div class="card">
+      <h2>Cámara <span class="camName" id="camName"></span></h2>
+      <div class="views">
+        <button data-view="optical" class="active">Vista óptica</button>
+        <button data-view="thermal">Vista térmica</button>
+        <button data-view="combined">Combinada</button>
+      </div>
+      <div id="heatWrap">
+        <div id="glow"><div class="ring"></div></div>
+        <canvas id="heat" width="9" height="16"></canvas>
+      </div>
+      <div id="scale"></div>
+      <div class="scaleRow">
+        <span id="minLabel">--°C</span>
+        <span>min / max</span>
+        <span id="maxLabel">--°C</span>
+      </div>
+      <div class="threshold" id="threshold">
+        <label><span>Umbral de calor (solo colores cálidos)</span><span id="thVal">60%</span></label>
+        <input type="range" id="thRange" min="0" max="100" value="60">
+        <div class="hint">Bajo este nivel no se muestra color; solo los puntos por encima se tiñen de amarillo/naranja/rojo. Sube el valor para ver menos calor.</div>
+      </div>
+    </div>
+
+    <div class="gridcol">
+      <div class="card" id="sensorCard">
+        <h2>Datos del sensor</h2>
+        <div class="stats">
+          <div class="stat"><div class="label">Temp. termistor</div><div class="value" id="thermistor">--<small> °C</small></div></div>
+          <div class="stat temp"><div class="label">Máx. matriz</div><div class="value" id="pixmax">--<small> °C</small></div></div>
+          <div class="stat temp"><div class="label">Mín. matriz</div><div class="value" id="pixmin">--<small> °C</small></div></div>
+          <div class="stat"><div class="label">Batería</div><div class="value" id="battery">--<small></small></div></div>
+          <div class="stat full"><div class="label">Estado del sensor</div><div id="sensorStatus" class="ok">Esperando datos...</div></div>
+          <div class="stat"><div class="label">Spreading Factor (SF)</div><div class="value" id="sf">--<small></small></div></div>
+          <div class="stat"><div class="label">Ciclo de reporte</div><div class="value" id="interval">--<small></small></div></div>
+          <div class="stat"><div class="label">RSSI del nodo (downlink)</div><div class="value" id="rssi_dBm">--<small> dBm</small></div><span class="sig-dot" id="dotRssiDbm"></span></div>
+          <div class="stat"><div class="label">RSSI del gateway</div><div class="value" id="rssi">--<small> dBm</small></div><span class="sig-dot" id="dotRssiGw"></span></div>
+          <div class="stat"><div class="label">SNR</div><div class="value" id="snr">--<small></small></div><span class="sig-dot" id="dotSnr"></span></div>
+          <div class="stat"><div class="label">Formato de paquete</div><div class="value" id="kind">--<small></small></div></div>
+        </div>
+      </div>
+
+      <div class="card card-spaced">
+        <h2>Información</h2>
+        <div class="stats">
+          <div class="stat full"><div class="label">Dispositivo (DevEUI)</div><div id="devEui">70b3d56f27cee98b</div></div>
+          <div class="stat"><div class="label">Última actualización</div><div class="value" id="updated" style="font-size:20px">--</div></div>
+          <div class="stat full">
+            <div class="label">Comandos (downlink)</div>
+            <div class="dl-buttons">
+              <button id="btnRssi" class="dl-btn" disabled style="flex:1">Consultar RSSI (03 00)</button>
+              <button id="btnRssiWait" class="dl-btn" disabled style="flex:1; display:none">Esperando respuesta...</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Datos vía MQTT ← Milesight UG56 ← nodo CubeCell + AMG8833 · Fondo: fotografía real</footer>
+
+<script>
+const TURBO = [
+  [48,18,59],[50,21,67],[51,24,74],[52,27,81],[53,30,88],[54,33,95],[55,36,102],
+  [56,39,108],[57,42,115],[58,45,121],[59,48,128],[60,51,134],[61,54,140],[62,57,146],
+  [63,60,151],[64,63,156],[64,66,162],[64,69,167],[64,72,172],[64,75,177],[64,78,181],
+  [64,81,186],[64,84,190],[64,87,194],[64,90,198],[64,93,201],[63,96,205],[63,99,208],
+  [62,102,211],[61,105,214],[61,108,217],[60,111,219],[59,114,222],[58,117,224],[57,120,226],
+  [55,123,228],[54,126,230],[53,129,231],[52,132,233],[50,135,234],[49,138,235],[47,141,236],
+  [46,144,237],[44,147,238],[43,150,238],[41,153,239],[40,156,240],[38,159,240],[36,162,240],
+  [35,164,241],[33,167,241],[32,170,241],[31,172,242],[29,175,242],[28,178,242],[27,180,242],
+  [26,183,242],[25,185,242],[24,188,242],[23,190,242],[23,192,242],[22,195,242],[22,197,242],
+  [22,199,241],[21,201,241],[21,203,241],[21,205,240],[21,207,240],[22,209,239],[22,211,238],
+  [23,213,238],[24,215,237],[25,217,236],[26,218,235],[28,220,234],[30,222,232],[32,224,231],
+  [35,225,230],[38,227,228],[41,228,227],[44,230,225],[48,231,223],[51,232,221],[55,234,219],
+  [60,235,217],[64,236,215],[68,237,212],[73,238,210],[78,239,207],[83,240,205],[88,241,202],
+  [93,242,200],[99,243,197],[104,244,194],[110,244,192],[115,245,189],[121,246,186],[126,247,184],
+  [132,248,181],[137,248,179],[143,249,176],[149,250,174],[154,250,171],[160,251,169],[166,252,167],
+  [171,252,164],[177,253,162],[182,253,160],[188,254,158],[193,254,156],[199,254,154],[204,254,152],
+  [209,254,150],[214,254,148],[219,254,146],[224,254,144],[229,254,142],[234,254,140],[239,254,138],
+  [244,254,136],[248,254,134],[252,253,132],[255,252,130],[255,250,128],[255,249,126],[255,247,124],
+  [255,245,122],[255,243,120],[255,241,118],[255,239,116],[255,237,114],[255,235,112],[255,233,110],
+  [255,230,108],[255,228,106],[255,226,104],[255,224,102],[255,221,100],[255,219,98],[255,216,96],
+  [255,214,94],[255,211,92],[255,208,90],[255,206,88],[255,203,86],[255,200,84],[255,197,82],
+  [255,194,80],[255,191,78],[255,188,76],[255,185,74],[255,182,72],[255,178,70],[255,175,68],
+  [255,172,66],[255,168,64],[255,165,62],[255,161,60],[255,158,58],[255,154,56],[255,150,54],
+  [255,147,52],[255,143,50],[255,139,48],[255,135,46],[255,131,44],[255,127,42],[255,123,40],
+  [255,119,38],[255,115,36],[255,111,34],[255,107,32],[255,103,30],[255,99,28],[255,95,26],
+  [255,91,24],[255,87,22],[255,83,20],[255,79,18],[254,75,16],[254,71,14],[254,67,12],
+  [253,63,11],[252,59,10],[251,55,9],[250,51,8],[249,47,7],[248,43,6],[247,39,5],
+  [246,35,4],[245,30,4],[244,26,3],[243,22,3],[242,18,2],[241,14,2],[240,10,2]
+];
+
+const heat = document.getElementById('heat');
+const ctx = heat.getContext('2d');
+const S = 8;
+const BUF_W = 560; // resolución del buffer (nítida), aspecto de la foto
+const BUF_H = Math.round(BUF_W * 1366 / 768);
+
+function frameCanvas() {
+  if (heat.width !== BUF_W || heat.height !== BUF_H) {
+    heat.width = BUF_W;
+    heat.height = BUF_H;
+  }
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+}
+
+let view = 'optical'; // optical | thermal | combined
+let threshold = 60;    // % para the combined
+let basePhoto = null;  // ImageData 8x8 de la foto (para la combinada)
+
+// ---- Cargar la fotografía real ----
+const photoImg = new Image();
+let photoReady = false;
+photoImg.onload = () => {
+  photoReady = true;
+  // Versión 8x8 (ids de píxel) para mezclar celda a celda en la combinada
+  const g = document.createElement('canvas');
+  g.width = S; g.height = S;
+  g.getContext('2d').drawImage(photoImg, 0, 0, S, S);
+  basePhoto = g.getContext('2d').getImageData(0,0,S,S);
+  // si hay un frame guardado, redibuja la vista actual al nitido
+  redraw();
+};
+photoImg.src = '/fondo2.jpg';
+
+// Mapa termico clasico equilibrado: el rojo se carga SOLO en los valores
+// altos (el punto mas caliente), naranja/amarillo en el rango medio-alto,
+// y azul/verde dominan las temperaturas bajas. Por eso una taza caliente
+// solo se ve roja en su centro mas caliente, no toda entera.
+// Paleta SOLO calida (amarillo -> naranja -> rojo). Se aplica unicamente a
+// los pixeles por encima del umbral; por debajo queda sin color (transparente),
+// de modo que las temperaturas bajas no aparecen en absoluto y solo se ve
+// rojo/naranja/amarillo donde hay calor real.
+const WARM = [
+  [245, 220, 40],  // amarillo (justo en el umbral)
+  [252, 180, 30],  // amarillo-naranja
+  [255, 140, 22],  // naranja
+  [255, 100, 20],  // rojo-naranja
+  [255, 60, 15],   // rojo
+  [255, 25, 35]    // rojo brillante (valor maximo)
+];
+
+// Devuelve el color calido para t si t >= tCut, o null (sin color) si es frio.
+function colorFor(t, tCut, max) {
+  if (t < tCut || max <= tCut) return null;
+  const n = (t - tCut) / (max - tCut);
+  const pos = n * (WARM.length - 1);
+  const i = Math.max(0, Math.min(WARM.length - 2, Math.floor(pos)));
+  const f = pos - i;
+  const a = WARM[i], b = WARM[i+1];
+  return [
+    Math.round(a[0] + (b[0]-a[0])*f),
+    Math.round(a[1] + (b[1]-a[1])*f),
+    Math.round(a[2] + (b[2]-a[2])*f)
+  ];
+}
+
+// Devuelve un canvas 8x8 con el coloreado de la capa termica.
+// mode: 'full' -> mapa termico (los frios quedan transparentes, los calientes calidos)
+//       'hot'  -> igual, para superponer sobre la foto (misma logica)
+function thermalLayer(frame, mode) {
+  const px = frame.pixels_C;
+  const min = frame.pixel_min_C;
+  const max = frame.pixel_max_C;
+  const tCut = min + (threshold/100)*(max-min);
+  const c = document.createElement('canvas');
+  c.width = S; c.height = S;
+  const g = c.getContext('2d');
+  const img = g.createImageData(S, S);
+  for (let y=0; y<S; y++) {
+    for (let x=0; x<S; x++) {
+      const i = (y*S+x)*4;
+      // Formato compacto no trae mapa (pixels_C null): píxeles sin color
+      const t = px ? px[y*S+x] : null;
+      const col = t!=null ? colorFor(t, tCut, max) : null;
+      if (col) {
+        img.data[i]=col[0]; img.data[i+1]=col[1]; img.data[i+2]=col[2]; img.data[i+3]=255;
+      } else {
+        img.data[i]=0; img.data[i+1]=0; img.data[i+2]=0; img.data[i+3]=0;
+      }
+    }
+  }
+  g.putImageData(img, 0, 0);
+  return c;
+}
+
+function drawPhotoOnly() {
+  frameCanvas();
+  ctx.clearRect(0,0,heat.width,heat.height);
+  if (photoReady) {
+    ctx.drawImage(photoImg, 0, 0, heat.width, heat.height);
+  } else {
+    ctx.fillStyle = '#333'; ctx.fillRect(0,0,heat.width,heat.height);
+  }
+}
+
+function updateStats(frame) {
+  const devEui = frame.dev_eui || 'unknown';
+  document.getElementById('camName').textContent = devLabel(devEui);
+  document.getElementById('minLabel').textContent = (frame.pixel_min_C!=null?frame.pixel_min_C.toFixed(1):'--')+'°C';
+  document.getElementById('maxLabel').textContent = (frame.pixel_max_C!=null?frame.pixel_max_C.toFixed(1):'--')+'°C';
+  document.getElementById('thermistor').innerHTML = (frame.thermistor_C!=null?frame.thermistor_C.toFixed(1):'--')+'<small> °C</small>';
+  document.getElementById('pixmax').innerHTML = (frame.pixel_max_C!=null?frame.pixel_max_C.toFixed(1):'--')+'<small> °C</small>';
+  document.getElementById('pixmin').innerHTML = (frame.pixel_min_C!=null?frame.pixel_min_C.toFixed(1):'--')+'<small> °C</small>';
+  const b = (frame.battery_V!=null)?(frame.battery_V.toFixed(2)+' V'):((frame.battery_mV!=null)?frame.battery_mV+' mV':'--');
+  document.getElementById('battery').innerHTML = b+'<small></small>';
+  const st = document.getElementById('sensorStatus');
+  if (frame.sensor_ok) { st.textContent='OK — sensor operativo'; st.className='ok'; }
+  else { st.textContent='FALLO de lectura del sensor'; st.className='bad'; }
+  if (frame.dev_eui) document.getElementById('devEui').textContent = frame.dev_eui;
+
+  // ---- Campos nuevos v2.1 ----
+  const n = (v, suf) => (v!=null)?v+suf:'--';
+  document.getElementById('sf').innerHTML = (frame.sf!=null?'SF'+frame.sf:'--')+'<small></small>';
+  document.getElementById('interval').innerHTML = n(frame.interval_min,' min');
+  document.getElementById('rssi_dBm').innerHTML = n(frame.rssi_dBm,' dBm');
+  document.getElementById('rssi').innerHTML = n(frame.rssi,' dBm');
+  const snrEl = document.getElementById('snr');
+  document.getElementById('snr').innerHTML = (frame.snr!=null?frame.snr+' dB':'--')+'<small></small>';
+  const kindMap = {'full':'Completo (SF7)','compact':'Compacto (SF8/9)','legacy':'Legacy'};
+  document.getElementById('kind').innerHTML = kindMap[frame.kind]||frame.kind||'--';
+
+  // ---- Semáforo de señal (RSSI nodo/gateway y SNR) ----
+  setSignalDot('dotRssiDbm', frame.rssi_dBm);
+  setSignalDot('dotRssiGw', frame.rssi);
+  setSignalDot('dotSnr', frame.snr, true);
+
+  document.getElementById('updated').textContent = new Date().toLocaleTimeString();
+}
+
+// Verde = señal alta/buena · Amarillo = media · Rojo = baja/débil · gris = sin dato
+function setSignalDot(id, value, isSnr) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (value == null) { el.className = 'sig-dot'; return; }
+  let cls;
+  if (isSnr) {                      // SNR (dB): >=8 buena · 0..8 media · <0 débil
+    cls = value >= 8 ? 'grn' : (value >= 0 ? 'yel' : 'red');
+  } else {                          // RSSI (dBm): >=-80 alta · -100..-80 media · <-100 baja
+    cls = value >= -80 ? 'grn' : (value >= -100 ? 'yel' : 'red');
+  }
+  el.className = 'sig-dot ' + cls;
+}
+
+function render(frame) {
+  frameCanvas();
+
+  if (view === 'optical') {
+    drawPhotoOnly();
+  } else if (view === 'thermal') {
+    ctx.clearRect(0,0,heat.width,heat.height);
+    if (frame.pixels_C && frame.pixels_C.length === 64) {
+      const layer = thermalLayer(frame, 'full');
+      ctx.drawImage(layer, 0, 0, S, S, 0, 0, heat.width, heat.height);
+    }
+    // compacto sin mapa: canvas negro con nota
+  } else {
+    // combined: foto nítida de fondo + puntos calientes encima
+    ctx.clearRect(0,0,heat.width,heat.height);
+    if (photoReady) ctx.drawImage(photoImg, 0, 0, heat.width, heat.height);
+    if (frame.pixels_C && frame.pixels_C.length === 64) {
+      const hot = thermalLayer(frame, 'hot');
+      ctx.globalAlpha = 0.85; // tintes calientes semitransparentes
+      ctx.drawImage(hot, 0, 0, S, S, 0, 0, heat.width, heat.height);
+      ctx.globalAlpha = 1.0;
+    }
+  }
+
+  updateStats(frame);
+}
+
+// ---- Botones de vista ----
+document.querySelectorAll('.views button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.views button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    view = btn.dataset.view;
+    document.getElementById('threshold').classList.toggle('visible', view==='thermal' || view==='combined');
+    // re-render si ya hay datos
+    redraw();
+  });
+});
+
+// ---- Umbral ----
+const thRange = document.getElementById('thRange');
+thRange.addEventListener('input', () => {
+  threshold = +thRange.value;
+  document.getElementById('thVal').textContent = threshold+'%';
+  redraw();
+});
+
+// =================================================================
+// Multi-nodo: árbol de dispositivos + selección
+// =================================================================
+let devices = [];          // [{dev_eui, nickname}]
+let lastFrames = {};       // dev_eui -> frame
+let lastSeen = {};         // dev_eui -> timestamp (ms)
+let selectedDev = null;    // dev_eui seleccionado
+const nameMap = {};        // dev_eui -> nickname (servidor)
+
+function shortEui(eui) {
+  const s = String(eui || '');
+  return s.length > 10 ? ('…' + s.slice(-8).toUpperCase()) : (s || 'desconocido');
+}
+function devLabel(eui) { return nameMap[eui] || shortEui(eui); }
+function deviceExists(eui) { return devices.some(d => d.dev_eui === eui); }
+function isOnline(eui) {
+  return lastSeen[eui] && (Date.now() - lastSeen[eui] < 120000);
+}
+
+function redraw() {
+  if (selectedDev && lastFrames[selectedDev]) render(lastFrames[selectedDev]);
+  else if (!selectedDev || !lastFrames[selectedDev]) drawPhotoOnly();
+}
+
+function registerDevice(eui, nickname) {
+  if (deviceExists(eui)) return;
+  devices.push({ dev_eui: eui, nickname: nickname || '' });
+  if (nickname) nameMap[eui] = nickname;
+}
+
+function metaText(eui) {
+  const fr = lastFrames[eui];
+  if (!fr) return '';
+  const parts = [];
+  if (fr.sf) parts.push('SF' + fr.sf);
+  const rssi = (fr.rssi_dBm != null) ? fr.rssi_dBm : (fr.rssi != null ? fr.rssi : null);
+  if (rssi != null) parts.push(rssi + ' dBm');
+  let batt = null;
+  if (fr.battery_V != null) batt = fr.battery_V.toFixed(2) + ' V';
+  else if (fr.battery_mV != null) batt = fr.battery_mV + ' mV';
+  const html = parts.join(' · ');
+  return html + (batt ? '<span class="m-batt">' + batt + '</span>' : '');
+}
+
+function renderTree() {
+  const tree = document.getElementById('devTree');
+  if (!devices.length) {
+    tree.innerHTML = '<div class="dev-empty">Esperando nodos...</div>';
+    return;
+  }
+  tree.innerHTML = '';
+  devices.forEach(d => {
+    const item = document.createElement('div');
+    item.className = 'dev-item' + (d.dev_eui === selectedDev ? ' active' : '');
+    item.dataset.eui = d.dev_eui;
+    const online = isOnline(d.dev_eui);
+    const waiting = !lastSeen[d.dev_eui];
+    const vType = lastFrames[d.dev_eui] ? lastFrames[d.dev_eui].kind : '';
+    item.innerHTML =
+      '<span class="dev-dot ' + (online ? 'online' : (waiting ? 'wait' : 'offline')) + '"></span>' +
+      '<div class="dev-info">' +
+        '<div class="dev-name">' + devLabel(d.dev_eui) + '</div>' +
+        '<div class="dev-eui">' + (d.dev_eui || 'sin DevEUI') + '</div>' +
+      '</div>' +
+      '<div class="dev-meta">' + metaText(d.dev_eui) + '</div>';
+    tree.appendChild(item);
+  });
+}
+
+function pulseTreeItem(eui) {
+  const el = document.querySelector('#devTree .dev-item[data-eui="' + eui + '"]');
+  if (!el) return;
+  el.classList.remove('pulse');
+  void el.offsetWidth;
+  el.classList.add('pulse');
+}
+
+function selectDevice(eui) {
+  selectedDev = eui;
+  renderTree();
+  redraw();
+}
+
+// Delegación de clics en el árbol
+document.getElementById('devTree').addEventListener('click', (ev) => {
+  const item = ev.target.closest('.dev-item');
+  if (item) selectDevice(item.dataset.eui);
+});
+
+function handleDeviceList(items) {
+  (items || []).forEach(it => {
+    const eui = it.dev_eui || 'unknown';
+    registerDevice(eui, it.nickname);
+    if (it.last_frame) {
+      lastFrames[eui] = it.last_frame;
+      lastSeen[eui] = (it.last_frame.ts ? it.last_frame.ts * 1000 : Date.now());
+    }
+  });
+  if (!selectedDev && devices.length) selectDevice(devices[0].dev_eui);
+  else renderTree();
+}
+
+function handleFrame(frame) {
+  const dev = frame.dev_eui || 'unknown';
+  if (!deviceExists(dev)) { registerDevice(dev, ''); renderTree(); }
+  lastFrames[dev] = frame;
+  lastSeen[dev] = Date.now();
+  renderTree();
+
+  if (dev === selectedDev) {
+    // Flash sutil (resplandor de borde) al llegar nueva data del seleccionado
+    const glow = document.getElementById('glow');
+    glow.classList.remove('flash');
+    void glow.offsetWidth; // reinicia la animacion
+    glow.classList.add('flash');
+    // Resplandor del borde de "Datos del sensor"
+    const card = document.getElementById('sensorCard');
+    card.classList.remove('live');
+    void card.offsetWidth;
+    card.classList.add('live');
+    render(frame);
+  } else {
+    pulseTreeItem(dev);
+  }
+}
+
+// Barrido de estado online/offline
+setInterval(() => renderTree(), 10000);
+
+// ---- WebSocket ----
+let ws;
+function connect() {
+  const proto = location.protocol==='https:'?'wss':'ws';
+  ws = new WebSocket(`${proto}://${location.host}/ws`);
+  const dot = document.getElementById('dot');
+  const txt = document.getElementById('connText');
+  ws.onopen = () => {
+    dot.className='ok'; txt.textContent='Conectado (en espera de datos)';
+    rssiPending = false;          // conexión nueva: no hay comando en vuelo
+    enableCmds(true);
+  };
+  ws.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    if (data && data.type === 'device_list') {
+      handleDeviceList(data.devices);
+      return;
+    }
+    if (data && data.type === 'command_ack') {
+      handleCmdAck(data);
+      return;
+    }
+    // Es un frame de un dispositivo
+    dot.className='ok'; txt.textContent='Recibiendo datos en tiempo real';
+    handleFrame(data);
+  };
+  ws.onclose = () => { dot.className='off'; txt.textContent='Desconectado — reintentando...'; setTimeout(connect,2000); };
+  ws.onerror = () => ws.close();
+}
+
+// ---- Comandos de downlink ----
+const btnRssi = document.getElementById('btnRssi');
+const btnRssiWait = document.getElementById('btnRssiWait');
+let rssiPending = false;
+let rssiTimeout = null;
+
+function enableCmds(enabled) {
+  btnRssi.disabled = !enabled || rssiPending;
+  btnRssi.style.display = enabled ? '' : 'none';
+  btnRssiWait.style.display = rssiPending ? '' : 'none';
+  btnRssiWait.disabled = true;
+}
+
+btnRssi.addEventListener('click', () => {
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  rssiPending = true;
+  enableCmds(true);
+  ws.send(JSON.stringify({type:'command', cmd:'rssi', dev_eui: selectedDev}));
+  clearTimeout(rssiTimeout);
+  rssiTimeout = setTimeout(() => {        // respaldo: nunca quedar colgado
+    rssiPending = false;
+    enableCmds(true);
+  }, 120000);
+});
+
+function handleCmdAck(ack) {
+  if (ack.cmd === 'rssi') {
+    rssiPending = false;
+    enableCmds(true);
+  }
+}
+
+connect();
+</script>
+</body>
+</html>

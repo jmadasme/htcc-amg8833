@@ -1,0 +1,27 @@
+{
+    "broker": {
+        "host": "127.0.0.1",
+        "port": 1883,
+        "username": "jma",
+        "password": "jma",
+        "keepalive": 60,
+        "reconnect_delay_min": 2,
+        "reconnect_delay_max": 30
+    },
+    "topics": [
+        "data/#",
+        "command/#",
+        "application/+/device/+/event/up",
+        "#"
+    ],
+    "qos": 1,
+    "device_eui_filter": "70b3d56f27cee98b",
+    "default_frame_period_s": 60,
+    "colormap": "turbo",
+    "heatmap_size": 720,
+    "window": {
+        "title": "Termocámara LoRaWAN AMG8833",
+        "width": 1200,
+        "height": 820
+    }
+}
