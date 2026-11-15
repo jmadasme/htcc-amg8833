@@ -134,15 +134,83 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
   .stat{border-right:0;border-bottom:1px solid var(--line)}
   h1{font-size:42px}
 }
-.gate{display:grid;grid-template-columns:1.35fr .85fr;gap:26px;align-items:center;border:1px solid var(--line);border-radius:20px;padding:26px;background:linear-gradient(135deg,rgba(42,157,143,.12),rgba(69,123,157,.08));margin:22px 0 24px}.gate-badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--accent);border:1px solid rgba(42,157,143,.35);padding:6px 10px;border-radius:999px;margin-bottom:12px}.gate-actions{display:flex;flex-direction:column;gap:10px;align-items:stretch}.version.private{border-style:dashed;background:linear-gradient(180deg,rgba(11,34,43,.55),rgba(6,20,27,.7))}.version .state{font-family:var(--mono);font-size:9px;letter-spacing:.12em;padding:4px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}.state.pub{color:#2A9D8F;border-color:rgba(42,157,143,.4);background:rgba(42,157,143,.08)}.state.priv{color:#9ab;border-color:rgba(91,124,153,.45);background:rgba(91,124,153,.08)}.private-link{color:#9ab;cursor:pointer}@media(max-width:820px){.gate{grid-template-columns:1fr}}</style>
+
+/* ── Contenido heredado del proyecto original, en clave sobria ── */
+.rich{max-width:78ch}
+.rich p{margin:0 0 14px;color:#c3d4da}
+.rich h3{margin:26px 0 10px;font-size:19px;letter-spacing:-.02em}
+.rich h4{margin:22px 0 8px;font-size:15px;letter-spacing:-.01em}
+.rich ul,.rich ol{margin:0 0 16px;padding-left:22px;color:#c3d4da}
+.rich li{margin:0 0 6px}
+.rich figure{margin:22px 0;border:1px solid var(--line);border-radius:16px;padding:10px;background:rgba(11,34,43,.5)}
+.rich figure img{width:100%;display:block;border-radius:10px}
+.rich figcaption{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:9px;line-height:1.5}
+.rich .table-wrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:12px}
+.rich table{border-collapse:collapse;width:100%;font-size:13.5px}
+.rich th,.rich td{padding:9px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.rich th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:rgba(11,34,43,.6)}
+.rich tr:last-child td{border-bottom:0}
+.rich pre{margin:18px 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:#04141a;overflow-x:auto;font-family:var(--mono);font-size:12px;line-height:1.6;color:#cfe3e8}
+.rich code{font-family:var(--mono);font-size:.92em}
+.rich .note{margin:18px 0;padding:13px 16px;border-left:2px solid var(--accent);background:rgba(42,157,143,.07);color:#c3d4da;font-size:14px}
+.rich .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin:18px 0}
+.rich .card-grid .card{margin:0}
+
+
+.rich h3{margin:26px 0 8px}
+.rich p{margin:0 0 14px;color:var(--muted);line-height:1.7}
+.fail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:6px}
+.fail{background:rgba(11,34,43,.55);border:1px solid var(--line);border-radius:14px;padding:18px}
+.fail .v{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--warm,#D6A86A)}
+.fail h3{font-size:16px;margin:8px 0 6px}
+.fail p{font-size:14px;margin:0;color:var(--muted)}
+.rating-head{display:flex;align-items:center;gap:20px;margin:6px 0 18px;padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:rgba(11,34,43,.55)}
+.rating-avg{font-family:var(--mono);font-size:40px;line-height:1;color:var(--accent)}
+.rating-avg small{font-size:14px;color:var(--muted)}
+.rating-head p{margin:4px 0 0;font-size:14px;color:var(--muted);max-width:70ch}
+.rating{display:grid;gap:2px}
+.rating-row{display:grid;grid-template-columns:165px minmax(90px,1fr) 48px;gap:14px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.rating-row:last-child{border-bottom:0}
+.rating-name{font-size:13.5px;font-weight:600}
+.rating-bar{height:6px;border-radius:99px;background:rgba(148,190,200,.14);overflow:hidden}
+.rating-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.rating-score{font-family:var(--mono);font-size:12.5px;color:var(--accent);text-align:right}
+.rating-note{grid-column:2/-1;font-size:12.5px;color:var(--muted);margin-top:-4px}
+.faq{display:grid;gap:0;margin-top:4px}
+.faq details{border-bottom:1px solid var(--line);padding:14px 0}
+.faq summary{cursor:pointer;font-weight:600;font-size:15px;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+";display:inline-block;width:18px;color:var(--accent);font-family:var(--mono)}
+.faq details[open] summary::before{content:"–"}
+.faq p{margin:10px 0 0 18px;font-size:14px;color:var(--muted)}
+@media(max-width:720px){
+  .fail-grid{grid-template-columns:1fr}
+  .rating-head{flex-direction:column;align-items:flex-start}
+  .rating-row{grid-template-columns:120px 1fr 44px}
+}
+
+
+.detail h2{margin:34px 0 10px;font-size:24px;letter-spacing:-.02em}
+.detail h3{margin:24px 0 8px;font-size:17px}
+.detail p{margin:0 0 14px;color:var(--muted);line-height:1.75}
+.detail ul,.detail ol{margin:0 0 16px 20px;color:var(--muted)}
+.detail li{margin:6px 0}
+.detail table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.5px}
+.detail th,.detail td{border-bottom:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}
+.detail th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.detail pre{background:rgba(6,20,27,.75);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:auto;font-size:13px}
+.detail code{font-family:var(--mono);font-size:.92em}
+.detail img{max-width:100%;border-radius:12px;border:1px solid var(--line)}
+.detail blockquote{border-left:2px solid var(--accent);margin:14px 0;padding:2px 0 2px 16px;color:var(--muted)}
+
+</style>
 <link rel="stylesheet" href="assets/community.css?v=1">
 </head>
 <body>
 <header class="nav"><div class="wrap nav-in">
   <a class="brand" href="/"><span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg></span><span>jmadasme<span style="color:var(--accent)">.</span>portfolio</span></a>
   <nav class="nav-links">
-    <a href="#proyecto">Proyecto</a><a href="#versiones">Versiones</a>
-      <a href="#acceso">Acceso</a><a href="#stack">Stack</a><a href="#docs">Docs</a><a href="#comunidad">Comunidad</a>
+    <a href="#proyecto">Proyecto</a><a href="#versiones">Versiones</a><a href="#stack">Stack</a><a href="#docs">Docs</a><a href="#comunidad">Comunidad</a>
     <a class="btn btn-ghost" style="padding:9px 15px" href="/iot/">← IoT</a>
   </nav>
 </div></header>
@@ -156,7 +224,7 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
       <a class="btn btn-primary" href="https://github.com/jmadasme/htcc-amg8833" target="_blank" rel="noopener">Ver el repositorio <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       <a class="btn btn-ghost" href="#versiones">Explorar versiones</a>
     </div>
-    <div class="badges"><span class="badge">MIT</span><span class="badge">IoT &amp; Hardware</span><span class="badge">4 versiones · 3 privadas</span><span class="badge">GitHub Pages</span></div>
+    <div class="badges"><span class="badge">MIT</span><span class="badge">IoT &amp; Hardware</span><span class="badge">4 versiónes</span><span class="badge">GitHub Pages</span></div>
   </div>
   <div class="hero-visual">
     <div class="visual-frame"><img src="assets/architecture.svg" alt="Árbol de versiones de HTCC AMG8833"></div>
@@ -165,7 +233,7 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
   </div>
 </div></section>
 
-<section class="stats"><div class="wrap stats-grid"><div class="stat"><div class="stat-num">4</div><div class="stat-label">versiones</div></div><div class="stat"><div class="stat-num">1</div><div class="stat-label">pública</div></div><div class="stat"><div class="stat-num">3</div><div class="stat-label">privadas</div></div><div class="stat"><div class="stat-num">1</div><div class="stat-label">licencia</div></div></div></section>
+<section class="stats"><div class="wrap stats-grid"><div class="stat"><div class="stat-num">4</div><div class="stat-label">versiones</div></div><div class="stat"><div class="stat-num">8x8</div><div class="stat-label">píxeles</div></div><div class="stat"><div class="stat-num">0x03</div><div class="stat-label">comando</div></div><div class="stat"><div class="stat-num">1</div><div class="stat-label">EEPROM</div></div></div></section>
 
 <section class="section" id="proyecto"><div class="wrap">
   <div class="section-head reveal"><div class="kicker">01 — El proyecto</div><h2>Qué resuelve</h2><p class="section-sub">Familia de nodos LoRaWAN con sensor térmico AMG8833 de 8x8. La evolución va del port a AB01 con EEPROM hasta el control remoto de spreading factor e intervalo, pasando por una variante con acelerómetro.</p></div>
@@ -176,69 +244,1143 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
 </div></section>
 
 <section class="section" id="versiones"><div class="wrap">
-  <div class="section-head reveal"><div class="kicker">02 — Versiones</div><h2>Una puerta abierta. Tres bajo llave.</h2>
-  <p class="section-sub">La primera etapa queda libre para probar el camino. Las siguientes conservan el refinamiento, la depuración y el rendimiento: se comparten solo a quien las pide.</p></div>
-  <div class="gate reveal" id="acceso">
-    <div>
-      <span class="gate-badge">MODELO DE ACCESO</span>
-      <h3>4 versiones · 1 pública · 3 privadas</h3>
-      <p>La primera versión es gratuita y abierta. <strong>Última versión: privada.</strong> Las mejoras, optimizaciones y variantes de hardware no se regalan de forma anónima: se solicitan, se conversan y se entregan con un alcance claro.</p>
-    </div>
-    <div class="gate-actions">
-      <a class="btn btn-primary" href="https://github.com/jmadasme/htcc-amg8833/issues/new?template=solicitud-acceso.yml&title=Solicitud%20de%20acceso%20a%20versiones%20privadas" target="_blank" rel="noopener">Solicitar acceso / licencia</a>
-      <a class="btn btn-ghost" href="#docs">Ver README y documentación</a>
-    </div>
-  </div>
+  <div class="section-head reveal"><div class="kicker">02 — Versiones</div><h2>La historia, completa.</h2><p class="section-sub">Cada carpeta conserva una etapa del proyecto. No se borraron las anteriores: se pusieron en contexto.</p></div>
   <div class="versions"><article class="version reveal">
   <div class="version-top"><h3>HTCC_AB01_AMG8833_Thermal_v1</h3><span class="count">4 archivos</span></div>
-  <div style="margin-bottom:8px"><span class="state pub">PÚBLICA</span></div>
   <p>Port del nodo térmico a HTCC-AB01 con persistencia de sesión LoRaWAN en EEPROM.</p>
-  <a href="versions/HTCC_AB01_AMG8833_Thermal_v1/" target="_blank" rel="noopener">Ver carpeta <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-</article><article class="version reveal private">
+  <a href="https://github.com/jmadasme/htcc-amg8833/tree/main/versions/HTCC_AB01_AMG8833_Thermal_v1" target="_blank" rel="noopener">Ver carpeta <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</article><article class="version reveal">
   <div class="version-top"><h3>HTCC_AB02A_AMG8833_Thermal</h3><span class="count">45 archivos</span></div>
-  <div style="margin-bottom:8px"><span class="state priv">PRIVADA</span></div>
   <p>Nodo térmico de ultra bajo consumo sobre AB02A con AMG8833 8x8.</p>
-  <a class="private-link" href="https://github.com/jmadasme/htcc-amg8833/issues/new?template=solicitud-acceso.yml&title=Solicitud%20de%20acceso%20a%20versiones%20privadas" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solicitar acceso</a>
-</article><article class="version reveal private">
+  <a href="https://github.com/jmadasme/htcc-amg8833/tree/main/versions/HTCC_AB02A_AMG8833_Thermal" target="_blank" rel="noopener">Ver carpeta <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</article><article class="version reveal">
   <div class="version-top"><h3>HTCC_AB02A_AMG8833_Thermal_Acelerometro</h3><span class="count">8 archivos</span></div>
-  <div style="margin-bottom:8px"><span class="state priv">PRIVADA</span></div>
   <p>Agrega acelerómetro para correlacionar movimiento con la escena térmica.</p>
-  <a class="private-link" href="https://github.com/jmadasme/htcc-amg8833/issues/new?template=solicitud-acceso.yml&title=Solicitud%20de%20acceso%20a%20versiones%20privadas" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solicitar acceso</a>
-</article><article class="version reveal private">
+  <a href="https://github.com/jmadasme/htcc-amg8833/tree/main/versions/HTCC_AB02A_AMG8833_Thermal_Acelerometro" target="_blank" rel="noopener">Ver carpeta <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+</article><article class="version reveal">
   <div class="version-top"><h3>HTCC_AB02A_AMG8833_Thermal_v2</h3><span class="count">34 archivos</span></div>
-  <div style="margin-bottom:8px"><span class="state priv">PRIVADA</span></div>
   <p>v2.1: downlink para SF e intervalo, EEPROM, RSSI en telemetría y comando 0x03.</p>
-  <a class="private-link" href="https://github.com/jmadasme/htcc-amg8833/issues/new?template=solicitud-acceso.yml&title=Solicitud%20de%20acceso%20a%20versiones%20privadas" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg> Solicitar acceso</a>
+  <a href="https://github.com/jmadasme/htcc-amg8833/tree/main/versions/HTCC_AB02A_AMG8833_Thermal_v2" target="_blank" rel="noopener">Ver carpeta <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
 </article></div>
 </div></section>
+<section class="section tight"><div class="wrap"><div class="section-head reveal"><div class="kicker">El concepto</div><h2>Qué es y por qué existe</h2></div><div class="rich reveal"><p>htcc-amg8833 documenta cuatro versiones de un nodo térmico de bajo consumo basado en la placa Heltec HTCC-AB02A y el sensor AMG8833 de 8x8 píxeles. El firmware lee la matriz por I2C, calcula mínimo, máximo y promedio, añade termistor y tensión de batería, y publica todo por LoRaWAN con deep sleep real y el sensor apagado entre mediciones.</p><p>Está dirigido a quien necesita vigilar temperatura sin acceso físico al nodo ni cambiar el firmware cada vez. Su aporte es la reconfiguración remota: por downlink se ajustan el factor de dispersión y el intervalo, se guardan en EEPROM, y la telemetría devuelve RSSI y configuración aplicada. También expone con claridad el costo de cada decisión en payload, aire y batería.</p></div></div></section>
+<section class="section tight"><div class="wrap"><div class="section-head reveal"><div class="kicker">El proyecto en detalle</div><h2>Documentación preservada</h2><p class="section-sub">El README original de la versión de referencia, completo.</p></div><div class="detail rich reveal">
+<p>Nodo LoRaWAN de <strong>clase A</strong> construido sobre una <strong>Heltec CubeCell HTCC-AB02A</strong>
+("CubeCell 1/2AA Node") que integra una <strong>termocámara Panasonic AMG8833 (8×8)</strong>
+por I2C y envía la imagen térmica al gateway por radio LoRa (SX1262).</p>
+<p>La <strong>v2.0</strong> añade sobre la v1 (que ya funciona en campo) la capacidad de <strong>control
+remoto por downlink</strong>: desde el Network Server se puede cambiar el <strong>Spreading
+Factor (SF)</strong> y el <strong>ciclo de reporte</strong> (intervalo entre envíos) sin tocar el
+firmware. Ambos parámetros se <strong>persisten en EEPROM</strong> y sobreviven a reset y a
+corte de alimentación.</p>
+<p>La <strong>v2.1</strong> añade <strong>telemetría de radio</strong> a todo reporte: cada uplink incluye ahora
+el <strong>SF actual</strong>, el <strong>intervalo de reporte (min)</strong> y el <strong>RSSI del último downlink
+recibido</strong> (telemetría de enlace). Además incorpora un <strong>tercer comando downlink
+<code>0x03 0x00</code></strong> que solicita al nodo reportar el RSSI en el siguiente uplink.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Placa</strong></td>
+<td>Heltec CubeCell HTCC-AB02A (ASR6502 + SX1262)</td>
+</tr>
+<tr>
+<td><strong>Sensor</strong></td>
+<td>Termocámara AMG8833 (8×8, 64 píxeles) + termistor interno</td>
+</tr>
+<tr>
+<td><strong>Stack</strong></td>
+<td>RadioLib 7.7.1</td>
+</tr>
+<tr>
+<td><strong>Región</strong></td>
+<td>AU915 — sub-banda 2</td>
+</tr>
+<tr>
+<td><strong>Activación</strong></td>
+<td>OTAA · Clase A · Puerto 1 (uplink <strong>y</strong> downlink) · sin confirmación</td>
+</tr>
+<tr>
+<td><strong>Gateway / NS</strong></td>
+<td>Milesight UG56 (Network Server embebido)</td>
+</tr>
+<tr>
+<td><strong>Novedad v2</strong></td>
+<td>Control por downlink de SF e intervalo + payload adaptativo</td>
+</tr>
+<tr>
+<td><strong>Novedad v2.1</strong></td>
+<td>Telemetría SF + intervalo + RSSI en <strong>todo</strong> reporte + comando <code>0x03</code> (consulta RSSI)</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="1-placa-objetivo-y-especificaciones">1. Placa objetivo y especificaciones</h2>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Placa</td>
+<td>Heltec CubeCell <strong>HTCC-AB02A</strong> ("CubeCell 1/2AA Node")</td>
+</tr>
+<tr>
+<td>MCU</td>
+<td><strong>ASR6502</strong> (System-in-Package) — ARM Cortex-M0+</td>
+</tr>
+<tr>
+<td>Radio</td>
+<td><strong>SX1262</strong> (integrada en el SiP, no es un módulo externo)</td>
+</tr>
+<tr>
+<td>RAM</td>
+<td>16 KB (SRAM <strong>retenida</strong> durante deep sleep)</td>
+</tr>
+<tr>
+<td>Flash</td>
+<td>128 KB (incluye <strong>EEPROM emulada</strong> para persistencia)</td>
+</tr>
+<tr>
+<td>Core Arduino</td>
+<td>CubeCell 1.4.0</td>
+</tr>
+<tr>
+<td>FQBN</td>
+<td><code>CubeCell:CubeCell:CubeCell_AB02A</code></td>
+</tr>
+<tr>
+<td>Stack LoRaWAN</td>
+<td><strong>RadioLib 7.7.1</strong> (<code>~/Arduino/libraries/RadioLib</code>)</td>
+</tr>
+<tr>
+<td>Interfaz PC</td>
+<td>CP210x USB-UART → <code>/dev/ttyUSB0</code> @ 115200 baud</td>
+</tr>
+<tr>
+<td>Alimentación</td>
+<td>Pila de litio <strong>Li-SOCl₂ 14250 (1/2AA, 3.6 V nominal)</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Consumo de memoria estimado</strong> (auditoría estática): RAM ~6 KB / 16 KB (~38 %),
+Flash ~100 KB / 128 KB (~78 %).</p>
+</blockquote>
+<hr/>
+<h2 id="2-que-hace-el-dispositivo-principio-de-funcionamiento">2. Qué hace el dispositivo (principio de funcionamiento)</h2>
+<p>El nodo funciona como un <strong>termógrafo de baja potencia</strong> que reporta
+periódicamente a un gateway LoRaWAN:</p>
+<ol>
+<li><strong>Join OTAA</strong> al arrancar (o re-join automático si se pierde la sesión).</li>
+<li>Tras el join, envía un <strong>uplink "sonda"</strong> de 6 bytes para que el Network
+   Server aplique la Data Rate (DR) correcta vía <code>LinkADRReq</code>/<code>LinkADRAns</code>.</li>
+<li>En cada ciclo: <strong>enciende</strong> la alimentación conmutada del sensor (VEXT),
+   lee termistor + 64 píxeles por I2C, <strong>apaga</strong> el sensor (0 µA en reposo),
+   construye el payload y hace el <strong>uplink por el puerto 1</strong>.</li>
+<li>Después del uplink abre la <strong>ventana de recepción (RX1/RX2)</strong> de clase A. Si
+   el NS envía un <strong>downlink</strong>, lo procesa (<code>handleDownlink</code>) con una <strong>whitelist
+   estricta</strong> de comandos.</li>
+<li>Entra en <strong>deep sleep real</strong> (RTC + <code>lowPowerHandler()</code>) durante el intervalo
+   configurado (por defecto 1 minuto) y despierta por timer.</li>
+</ol>
+<h3 id="principio-de-funcionamiento-lorawan">Principio de funcionamiento LoRaWAN</h3>
+<ul>
+<li><strong>OTAA (Over-The-Air Activation)</strong>: el nodo negocia las claves de sesión con el
+  Network Server en cada join. No usa ABP.</li>
+<li><strong>Clase A</strong>: el downlink solo puede llegar en las dos ventanas RX que se abren
+  <strong>justo después</strong> de un uplink. Por eso cualquier comando de configuración se
+  entrega "a continuación" del envío periódico del nodo.</li>
+<li><strong>Deep sleep</strong>: entre envíos el MCU duerme (consumo mínimo) y solo un timer RTC
+  lo despierta. La SRAM y la sesión LoRaWAN se conservan durante el sueño.</li>
+</ul>
+<h3 id="payload-adaptativo-novedad-v2-v21">Payload adaptativo (novedad v2 + v2.1)</h3>
+<p>El payload completo de <strong>138 bytes</strong> (64 píxeles individuales + termistor +
+batería + 5 B de telemetría) <strong>solo cabe en SF7/DR5</strong> (<code>maxPayload ≈ 238 B</code>). En
+SF8 (DR4) y SF9 (DR3) el <code>maxPayload</code> baja a ≈125 B y el payload completo <strong>no
+cabe</strong> (error <code>PACKET_TOO_LONG</code>). Por eso:</p>
+<table>
+<thead>
+<tr>
+<th>SF actual</th>
+<th>Formato enviado</th>
+<th>Tamaño</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SF7</strong> (DR5)</td>
+<td>Payload <strong>completo</strong> (64 píxeles + termistor + batería + telemetría)</td>
+<td>138 B</td>
+</tr>
+<tr>
+<td><strong>SF8 / SF9</strong> (DR4 / DR3)</td>
+<td>Payload <strong>compacto</strong> (MIN/MAX/PROMEDIO + termistor + batería + telemetría)</td>
+<td>16 B</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Al subir el SF se pierde la resolución espacial de los 64 píxeles individuales:
+en su lugar se envía el <strong>mínimo, máximo y promedio</strong> de la imagen, que es la
+forma segura de permitir SF altos sin romper el enlace.</p>
+</blockquote>
+<h3 id="telemetria-v21-sf-intervalo-rssi-en-todo-reporte">Telemetría v2.1 (SF + intervalo + RSSI en TODO reporte)</h3>
+<p>Desde la v2.1, <strong>ambos formatos</strong> incluyen al final tres campos de telemetría que
+permiten diagnosticar el enlace de radio desde el Network Server sin tocar el
+firmware:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Longitud</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SF actual</strong></td>
+<td>1 B</td>
+<td>Spreading Factor en uso (7..9)</td>
+</tr>
+<tr>
+<td><strong>Intervalo</strong></td>
+<td>2 B (uint16 BE)</td>
+<td>Ciclo de reporte en minutos (1..1440)</td>
+</tr>
+<tr>
+<td><strong>RSSI</strong></td>
+<td>2 B (int16 BE)</td>
+<td>Intensidad del <strong>último downlink</strong> recibido (dBm, negativo); <code>0x8000</code> = "no disponible" (aún no hubo downlink)</td>
+</tr>
+</tbody>
+</table>
+<p>El RSSI se obtiene con <code>radio.getRSSI()</code> en el momento de recibir un downlink
+(valor en dBm del último downlink). Si el nodo aún no ha recibido ningún downlink,
+el campo vale <code>0x8000</code> (−32768). Consulta la sección <a href="#8-formato-de-payload-uplink">8. Formato de payload</a>
+para el detalle byte a byte y <a href="#7-guía-de-comandos-downlink">7. Guía de comandos downlink</a>
+para el comando <code>0x03</code> de consulta de RSSI.</p>
+<hr/>
+<h2 id="3-forma-de-operar-instrucciones-de-uso">3. Forma de operar (instrucciones de uso)</h2>
+<h3 id="31-arranque-y-funcionamiento-normal">3.1 Arranque y funcionamiento normal</h3>
+<ol>
+<li>Alimenta la placa con la pila Li-SOCl₂ 14250 (3.6 V) respetando la polaridad.</li>
+<li>Conecta la placa por USB solo para depurar (<code>/dev/ttyUSB0</code> @ 115200).</li>
+<li>Al encender, el nodo imprime por serial su identidad, carga la configuración
+   persistida de EEPROM, inicializa la radio y ejecuta el join OTAA.</li>
+<li>Después del join envía el uplink sonda y, a continuación, el primer reporte.</li>
+<li>A partir de ahí entra en bucle: <strong>medir → enviar → dormir</strong> durante el
+   intervalo configurado.</li>
+</ol>
+<h3 id="32-cambiar-parametros-en-remoto-downlink">3.2 Cambiar parámetros en remoto (downlink)</h3>
+<p>No es necesario reprogramar nada. Desde el Network Server del gateway Milesight
+(usando el <strong>Payload Codec</strong> con la función <code>Encode</code>) se envían comandos JSON que
+se convierten en bytes downlink:</p>
+<ul>
+<li><code>{ "set_sf": 8 }</code> → cambia el SF a 8.</li>
+<li><code>{ "interval_min": 5 }</code> → cambia el ciclo a 5 minutos.</li>
+<li><code>{ "query_rssi": true }</code> → solicita el RSSI del último downlink (v2.1).</li>
+</ul>
+<p>Consulta la <strong><a href="#7-guía-de-comandos-downlink">Guía de comandos downlink</a></strong> para la
+tabla completa de ejemplos hexadecimales.</p>
+<h3 id="33-verificacion-de-la-configuracion-actual">3.3 Verificación de la configuración actual</h3>
+<p>En el monitor serial verás líneas como:</p>
+<pre><code>[CFG] EEPROM: sf=7 interval=1 min
+[DL] SF cambiado a 8 (DR4, maxPayload=125 B)
+[DL] Intervalo cambiado a 5 min
+[DL] Consulta RSSI recibida: RSSI=-72 dBm (se reportará en el próximo uplink)
+</code></pre>
+<p>Estas líneas confirman que un comando downlink fue recibido, aplicado y persistido.
+En la v2.1, cada uplink decodificado en el NS incluye además <code>sf</code>, <code>interval_min</code>
+y <code>rssi_dBm</code> (o <code>null</code> si no hubo downlink previo).</p>
+<hr/>
+<h2 id="4-tabla-de-pines-pinout">4. Tabla de pines (pinout)</h2>
+<h3 id="41-pines-de-la-radio-sx1262-internos-del-sip-asr6502-no-reasignables">4.1 Pines de la radio SX1262 (internos del SiP ASR6502, <strong>no reasignables</strong>)</h3>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Pin físico (GPIO)</th>
+<th>Pin CubeCell</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NSS (SPI chip-select)</td>
+<td>35</td>
+<td>P4_3</td>
+</tr>
+<tr>
+<td>DIO1 (IRQ de radio)</td>
+<td>38</td>
+<td>P4_6</td>
+</tr>
+<tr>
+<td>RST (reset)</td>
+<td>47</td>
+<td>P5_7</td>
+</tr>
+<tr>
+<td>BUSY</td>
+<td>39</td>
+<td>P4_7</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>En el firmware: <code>Module mod(35, 38, 47, 39);</code> → NSS, DIO1, RST, BUSY.</p>
+</blockquote>
+<h3 id="42-pines-del-sensor-amg8833-i2c">4.2 Pines del sensor AMG8833 (I2C)</h3>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Pin CubeCell</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SDA</td>
+<td>P0_1</td>
+<td>Línea de datos I2C</td>
+</tr>
+<tr>
+<td>SCL</td>
+<td>P0_0</td>
+<td>Línea de reloj I2C</td>
+</tr>
+<tr>
+<td>Alimentación conmutada</td>
+<td><strong>VEXT (P3_2)</strong></td>
+<td><strong>Polaridad INVERTIDA: HIGH = ON, LOW = OFF</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="43-pines-adicionales">4.3 Pines adicionales</h3>
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Pin / Interfaz</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dirección I2C AMG8833</td>
+<td><code>0x69</code> (por defecto)</td>
+<td><code>0x68</code> si el puente ADDR está soldado</td>
+</tr>
+<tr>
+<td>USB / UART depuración</td>
+<td>CP210x → <code>/dev/ttyUSB0</code></td>
+<td>115200 baud</td>
+</tr>
+</tbody>
+</table>
+<hr/>
+<h2 id="5-diagrama-de-conexion-ascii">5. Diagrama de conexión (ASCII)</h2>
+<pre><code>                       Heltec CubeCell HTCC-AB02A
+                     (ASR6502 SiP + SX1262 integrada)
+   +-------------------------------------------------------------+
+   |                                                             |
+   |  [P4_3] NSS   ----------------------------  (interno) SX1262 |
+   |  [P4_6] DIO1  ----------------------------  (interno) SX1262 |
+   |  [P5_7] RST   ----------------------------  (interno) SX1262 |
+   |  [P4_7] BUSY  ----------------------------  (interno) SX1262 |
+   |                                                             |
+   |  [P0_1] SDA  -----------------------------------&gt; AMG8833 SDA|
+   |  [P0_0] SCL  -----------------------------------&gt; AMG8833 SCL|
+   |  [P3_2] VEXT ----------------------------------&gt; AMG8833 VDD|
+   |                       (polaridad INVERTIDA: HIGH=ON/LOW=OFF) |
+   |                                                             |
+   |  [USB CP210x]  -----------------------------&gt; /dev/ttyUSB0   |
+   |                                            (monitor 115200)  |
+   +-------------------------------------------------------------+
+                                |
+                                |  GND común (placa &lt;-&gt; sensor)
+                                |
 
-<section class="section tight"><div class="wrap">
-  <div class="section-head reveal"><div class="kicker">03 — Cómo se usa</div><h2>De la carpeta a la práctica.</h2></div>
-  <div class="timeline"><div class="step reveal"><div class="step-n">01</div><h4>Conectá el AMG8833</h4><p>I2C con alimentación estable; el sensor es sensible al ruido.</p></div><div class="step reveal"><div class="step-n">02</div><h4>Ajustá la región</h4><p>La sesión LoRaWAN debe coincidir con el gateway.</p></div><div class="step reveal"><div class="step-n">03</div><h4>Provisioná las claves</h4><p>Usá las tuyas; las originales no se publican.</p></div><div class="step reveal"><div class="step-n">04</div><h4>Probá el downlink</h4><p>El comando 0x03 cambia parámetros y debe confirmarse en telemetría.</p></div></div>
-</div></section>
-
-<section class="section tight"><div class="wrap">
-  <div class="section-head reveal"><div class="kicker">04 — Decisiones</div><h2>Lo que lo hace distinto</h2></div>
-  <div class="features"><div class="feature reveal"><h4>Sesión persistente</h4><p>EEPROM evita rejoins innecesarios.</p></div><div class="feature reveal"><h4>Control remoto</h4><p>SF e intervalo se ajustan por downlink.</p></div><div class="feature reveal"><h4>Telemetría útil</h4><p>RSSI y estado acompañan la matriz térmica.</p></div><div class="feature reveal"><h4>Bajo consumo</h4><p>AB02A y deep sleep para despliegues con batería.</p></div><div class="feature reveal"><h4>Acelerómetro</h4><p>Una variante agrega contexto de movimiento.</p></div><div class="feature reveal"><h4>Cuatro etapas</h4><p>Se puede comparar el costo de cada decisión.</p></div></div>
-</div></section>
-
-<section class="section tight" id="stack"><div class="wrap">
-  <div class="section-head reveal"><div class="kicker">05 — Stack y arranque</div><h2>Con qué está construido</h2></div>
-  <div class="stack-grid">
-    <div class="reveal"><div class="chips"><span class="chip">HTCC-AB01</span><span class="chip">HTCC-AB02A</span><span class="chip">AMG8833</span><span class="chip">LoRaWAN</span><span class="chip">I2C</span><span class="chip">EEPROM</span></div><div class="note"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg><span>El sensor AMG8833 y la placa no se incluyen. El downlink 0x03 está documentado en el datasheet de la versión v2.</span></div></div>
-    <div class="terminal reveal"><div class="terminal-bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><pre>git clone https://github.com/jmadasme/htcc-amg8833.git
-cd htcc-amg8833/versions/HTCC_AB01_AMG8833_Thermal_v1
-# revisá config.h y el README antes de compilar</pre></div>
-  </div>
-</div></section>
-
-<section class="section tight" id="docs"><div class="wrap">
-  <div class="section-head reveal"><div class="kicker">06 — Documentación</div><h2>Para usar y para entender.</h2><p class="section-sub">Cada documento está en el repositorio, versionado junto al código.</p></div>
-  <div class="docs"><a class="doc reveal" href="https://github.com/jmadasme/htcc-amg8833/blob/main/docs/datasheet.md" target="_blank" rel="noopener"><span class="tag">DATASHEET</span><h4>Manual de operación</h4><p>Instalación, configuración, uso y diagnóstico.</p></a><a class="doc reveal" href="https://github.com/jmadasme/htcc-amg8833/blob/main/docs/developer.md" target="_blank" rel="noopener"><span class="tag">DEVELOPER</span><h4>Guía de código</h4><p>Arquitectura, módulos, contratos y extensión.</p></a><a class="doc reveal" href="https://github.com/jmadasme/htcc-amg8833/blob/main/docs/REFERENCES.md" target="_blank" rel="noopener"><span class="tag">REFERENCES</span><h4>Referencias</h4><p>Estándares, librerías y fuentes oficiales.</p></a></div>
-</div></section>
-
-<section class="section tight"><div class="wrap"><div class="note reveal"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span><strong>Preservación:</strong> las versiones se copiaron sin <code>.git</code>, <code>node_modules</code>, entornos virtuales, compilados ni bases de datos. Los tokens y claves detectados fueron redactados; las plantillas <code>.example</code> se conservan. Las limitaciones conocidas están en la documentación, no escondidas.</span></div></div></section>
-
+   AMG8833 (8x8 Grid-EYE)
+   +--------------------------+
+   |  VDD  &lt;--- VEXT (P3_2)   |
+   |  GND  &lt;--- GND           |
+   |  SDA  &lt;--- P0_1          |
+   |  SCL  &lt;--- P0_0          |
+   |  ADDR = no soldado -&gt; 0x69 (soldado -&gt; 0x68) |
+   +--------------------------+
+</code></pre>
+<h3 id="descripcion-textual-del-conexionado">Descripción textual del conexionado</h3>
+<ol>
+<li><strong>Alimentación del sensor</strong>: el pin <code>VEXT</code> (P3_2) del CubeCell alimenta el
+   <code>VDD</code> del AMG8833. La lógica del pin está <strong>invertida</strong> respecto al pinout
+   oficial: <code>digitalWrite(VEXT, HIGH)</code> enciende el sensor y <code>LOW</code> lo apaga (0 µA
+   en reposo). Verificado en campo con escáner I2C.</li>
+<li><strong>Bus I2C</strong>: <code>SDA</code> (P0_1) → AMG8833 SDA; <code>SCL</code> (P0_0) → AMG8833 SCL. Ambos
+   comparten la masa (GND) con la placa.</li>
+<li><strong>Dirección</strong>: el AMG8833 se lee en <code>0x69</code> (puente ADDR sin soldar). Si está
+   soldado, la dirección pasa a <code>0x68</code>; el firmware prueba ambas.</li>
+<li><strong>Radio</strong>: NSS, DIO1, RST y BUSY son pines internos del SiP ASR6502 y <strong>no
+   requieren cableado externo</strong>.</li>
+<li><strong>PC</strong>: el puerto USB CP210x permite ver los logs por <code>/dev/ttyUSB0</code> @ 115200.</li>
+</ol>
+<hr/>
+<h2 id="6-configuracion-lorawan">6. Configuración LoRaWAN</h2>
+<h3 id="61-registro-del-dispositivo-en-el-network-server-milesight-ug56">6.1 Registro del dispositivo en el Network Server (Milesight UG56)</h3>
+<p>El gateway <strong>Milesight UG56</strong> trae un <strong>Network Server (NS) embebido</strong>. Para
+registrar el nodo:</p>
+<ol>
+<li>Accede a la web de administración del UG56 (por su IP en la LAN).</li>
+<li>Ve a <strong>Network Server → Devices</strong> (o <em>Applications → Devices</em>, según firmware).</li>
+<li>Crea un <strong>nuevo dispositivo</strong> y selecciona <strong>OTAA</strong> (Class A).</li>
+<li>Introduce las credenciales (ver §6.2).</li>
+<li>Configura la <strong>región AU915</strong> y, si el NS lo pide, la <strong>sub-banda 2</strong>.</li>
+<li>Configura el <strong>Payload Codec</strong> pegando el contenido de <code>decoder.js</code> (ver §6.4).</li>
+<li>Guarda. El dispositivo queda a la espera del primer join del nodo.</li>
+</ol>
+<h3 id="62-credenciales-otaa">6.2 Credenciales OTAA</h3>
+<p>Las credenciales reales viven en <code>credentials.h</code> (archivo <strong>no versionado</strong>, en
+<code>.gitignore</code>). La plantilla pública está en <code>credentials.example.h</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Dónde está</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DevEUI</strong></td>
+<td><code>credentials.h</code> (<code>devEui</code>)</td>
+<td>Identificador público del nodo (64-bit)</td>
+</tr>
+<tr>
+<td><strong>JoinEUI / AppEUI</strong></td>
+<td><code>credentials.h</code> (<code>joinEui</code>)</td>
+<td>Identificador público de la red/aplicación (64-bit)</td>
+</tr>
+<tr>
+<td><strong>AppKey</strong></td>
+<td><code>credentials.h</code> (<code>appKey[]</code>, 16 bytes)</td>
+<td><strong>CLAVE SECRETA</strong> — nunca versionar ni publicar</td>
+</tr>
+<tr>
+<td><strong>NwkKey</strong></td>
+<td><code>credentials.h</code> (<code>nwkKey[]</code>, 16 bytes)</td>
+<td><strong>CLAVE SECRETA</strong> — nunca versionar ni publicar</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Importante</strong>: RadioLib espera las credenciales en <strong>big-endian</strong> (orden
+"over-the-air"). Al copiar <code>credentials.example.h</code> a <code>credentials.h</code> respeta ese
+orden. <strong>No publiques ni documentes los valores reales de AppKey/NwkKey.</strong></p>
+</blockquote>
+<h3 id="63-region-y-sub-banda">6.3 Región y sub-banda</h3>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Región</td>
+<td><strong>AU915</strong></td>
+</tr>
+<tr>
+<td>Sub-banda</td>
+<td><strong>2</strong></td>
+</tr>
+<tr>
+<td>Gateway</td>
+<td>Milesight UG56 (NS embebido)</td>
+</tr>
+<tr>
+<td>Clase</td>
+<td>A</td>
+</tr>
+<tr>
+<td>Puerto</td>
+<td>1 (uplink <strong>y</strong> downlink)</td>
+</tr>
+<tr>
+<td>Confirmación</td>
+<td>Unconfirmed</td>
+</tr>
+<tr>
+<td>ADR</td>
+<td><strong>OFF</strong> (el nodo llama a <code>node.setADR(false)</code> tras cada join)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Configura la <strong>sub-banda 2</strong> en el gateway/NS para que los canales coincidan con
+los del nodo. Si el gateway no coincide de sub-banda, el join y los uplinks
+fallarán silenciosamente.</p>
+</blockquote>
+<h3 id="64-configurar-el-payload-codec-decoderjs">6.4 Configurar el Payload Codec (decoder.js)</h3>
+<ol>
+<li>En el dispositivo del NS Milesight, abre <strong>Payload Codec</strong> (o <em>Payload
+   Decoder</em> / <em>Codec</em>).</li>
+<li><strong>Pega el contenido completo de <code>decoder.js</code></strong> en el editor.</li>
+<li>El archivo define <strong>dos funciones</strong>:
+   - <code>Decode(fPort, bytes)</code> → convierte el <strong>uplink</strong> a JSON legible.
+   - <code>Encode(fPort, obj)</code> → convierte un JSON de comando en <strong>bytes downlink</strong>.</li>
+<li>Guarda y aplica. Verifica con un uplink real que el JSON decodificado aparece.</li>
+</ol>
+<blockquote>
+<p><strong>Compatibilidad</strong>: el formato es el de <strong>ChirpStack v3 / Milesight</strong>:
+JavaScript ES5 (sin <code>let</code>/<code>const</code>, sin <em>arrow functions</em>), <code>Decode</code> devuelve un
+objeto JSON <strong>directo</strong> (no <code>{data, errors}</code>) y <code>Encode</code> devuelve un <strong>array de
+bytes directo</strong>. Solo caracteres ASCII.</p>
+</blockquote>
+<hr/>
+<h2 id="7-guia-de-comandos-downlink-sf-intervalo-rssi">7. Guía de comandos downlink (SF + intervalo + RSSI)</h2>
+<p>El nodo procesa downlinks recibidos en <strong>FPort 1</strong> con una <strong>whitelist estricta</strong>.
+Cualquier comando que no encaje exactamente se ignora y se registra por serial.</p>
+<h3 id="71-tabla-de-comandos">7.1 Tabla de comandos</h3>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Bytes</th>
+<th>Campo</th>
+<th>Rango</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cambiar SF</td>
+<td><code>0x01 &lt;sf&gt;</code></td>
+<td><code>sf</code> (uint8)</td>
+<td><strong>7..9</strong></td>
+<td>Cambia SF (→ DR5..DR3) + persiste en EEPROM</td>
+</tr>
+<tr>
+<td>Cambiar intervalo</td>
+<td><code>0x02 &lt;min_hi&gt; &lt;min_lo&gt;</code></td>
+<td><code>minutes</code> (uint16 <strong>big-endian</strong>)</td>
+<td><strong>1..1440</strong></td>
+<td>Cambia ciclo de reporte en minutos + persiste</td>
+</tr>
+<tr>
+<td>Consultar RSSI</td>
+<td><code>0x03 0x00</code></td>
+<td>(sin parámetros)</td>
+<td>—</td>
+<td>Solicita reportar el RSSI del último downlink en el próximo uplink</td>
+</tr>
+</tbody>
+</table>
+<h3 id="72-como-enviar-el-downlink-desde-el-ns-milesight-via-encode">7.2 Cómo enviar el downlink desde el NS Milesight (vía <code>Encode</code>)</h3>
+<p>El NS usa la función <code>Encode(fPort, obj)</code> del codec. Escribes un <strong>JSON</strong> y el
+codec lo traduce a bytes:</p>
+<table>
+<thead>
+<tr>
+<th>JSON de entrada</th>
+<th>Bytes downlink generados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>{ "set_sf": 7 }</code></td>
+<td><code>01 07</code></td>
+</tr>
+<tr>
+<td><code>{ "set_sf": 8 }</code></td>
+<td><code>01 08</code></td>
+</tr>
+<tr>
+<td><code>{ "set_sf": 9 }</code></td>
+<td><code>01 09</code></td>
+</tr>
+<tr>
+<td><code>{ "interval_min": 1 }</code></td>
+<td><code>02 00 01</code></td>
+</tr>
+<tr>
+<td><code>{ "interval_min": 5 }</code></td>
+<td><code>02 00 05</code></td>
+</tr>
+<tr>
+<td><code>{ "interval_min": 60 }</code></td>
+<td><code>02 00 3C</code></td>
+</tr>
+<tr>
+<td><code>{ "interval_min": 255 }</code></td>
+<td><code>02 00 FF</code></td>
+</tr>
+<tr>
+<td><code>{ "interval_min": 256 }</code></td>
+<td><code>02 01 00</code></td>
+</tr>
+<tr>
+<td><code>{ "interval_min": 1440 }</code></td>
+<td><code>02 05 A0</code></td>
+</tr>
+<tr>
+<td><code>{ "query_rssi": true }</code></td>
+<td><code>03 00</code></td>
+</tr>
+<tr>
+<td><code>{ "set_sf": 7, "interval_min": 60 }</code></td>
+<td><code>01 07 02 00 3C</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>El comando <code>query_rssi</code> no cambia ninguna configuración: solo pide que el nodo
+reporte el RSSI del último downlink recibido (que de todas formas ya viaja en
+cada uplink desde la v2.1). Es útil para forzar una medición puntual del enlace.</p>
+</blockquote>
+<h3 id="73-tabla-de-ejemplos-hexadecimales-payload-downlink-directo">7.3 Tabla de ejemplos hexadecimales (payload downlink directo)</h3>
+<p>Si el NS no usa <code>Encode</code> y envías bytes hex a mano, estos son los payloads:</p>
+<table>
+<thead>
+<tr>
+<th>Acción</th>
+<th>Payload hex</th>
+<th>Notas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SF → 7</td>
+<td><code>01 07</code></td>
+<td>DR5, permite payload completo 138 B</td>
+</tr>
+<tr>
+<td>SF → 8</td>
+<td><code>01 08</code></td>
+<td>DR4, pasa a payload compacto 16 B</td>
+</tr>
+<tr>
+<td>SF → 9</td>
+<td><code>01 09</code></td>
+<td>DR3, payload compacto 16 B</td>
+</tr>
+<tr>
+<td>Intervalo 1 min</td>
+<td><code>02 00 01</code></td>
+<td>Valor por defecto</td>
+</tr>
+<tr>
+<td>Intervalo 5 min</td>
+<td><code>02 00 05</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Intervalo 60 min</td>
+<td><code>02 00 3C</code></td>
+<td></td>
+</tr>
+<tr>
+<td>Intervalo 1440 min (24 h)</td>
+<td><code>02 05 A0</code></td>
+<td>Máximo permitido</td>
+</tr>
+<tr>
+<td>Consulta RSSI</td>
+<td><code>03 00</code></td>
+<td>El próximo uplink reporta el RSSI del último downlink</td>
+</tr>
+<tr>
+<td>SF 7 + intervalo 60 min</td>
+<td><code>01 07 02 00 3C</code></td>
+<td>Dos comandos encadenados</td>
+</tr>
+</tbody>
+</table>
+<h3 id="74-mapeo-sf-data-rate-au915-bw125">7.4 Mapeo SF → Data Rate (AU915, BW125)</h3>
+<table>
+<thead>
+<tr>
+<th>SF</th>
+<th>DR</th>
+<th>maxPayload (aprox., vía <code>getMaxPayloadLen()</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td><strong>DR5</strong></td>
+<td>≈ 238 B → <strong>payload completo 138 B</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>DR4</strong></td>
+<td>≈ 125 B → payload compacto 16 B</td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>DR3</strong></td>
+<td>≈ 123 B → payload compacto 16 B</td>
+</tr>
+</tbody>
+</table>
+<h3 id="75-por-que-el-sf-esta-limitado-a-79-dwell-time-au915">7.5 Por qué el SF está limitado a 7..9 (dwell time AU915)</h3>
+<p>La región <strong>AU915 impone un límite de <em>dwell time</em> de 400 ms</strong> por transmisión.
+Los SF altos (SF10, SF11, SF12) generan <em>time-on-air</em> superior a 400 ms y quedan
+<strong>prohibidos</strong>. Si se forzara un SF≥10:</p>
+<ul>
+<li>El nodo fallaría el uplink con <code>DWELL_TIME_EXCEEDED</code> / <code>PACKET_TOO_LONG</code>.</li>
+<li>Como el SF se <strong>persiste en EEPROM</strong>, el nodo quedaría <strong>"bricked"</strong> sin
+  recuperación por radio (habría que reflashear).</li>
+</ul>
+<p>Por eso el firmware restringe el downlink a <strong>SF 7..9</strong> (<code>SF_MIN</code>/<code>SF_MAX</code>) y,
+como defensa adicional, llama a <code>node.setDwellTime(false)</code> tras cada join y hace
+un <em>guard-check</em> de <code>getMaxPayloadLen()</code> antes de persistir.</p>
+<hr/>
+<h2 id="8-formato-de-payload-uplink">8. Formato de payload (uplink)</h2>
+<p>Tres formatos posibles según el contexto. Endianidad explícita en cada campo.</p>
+<h3 id="81-payload-completo-138-b-solo-sf7dr5">8.1 Payload completo — 138 B (solo SF7/DR5)</h3>
+<table>
+<thead>
+<tr>
+<th>Byte(s)</th>
+<th>Longitud</th>
+<th>Campo</th>
+<th>Formato</th>
+<th>Endianidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>Versión/estado</td>
+<td><code>0x01</code> OK · <code>0x81</code> fallo lectura I2C</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1–2</td>
+<td>2</td>
+<td>Termistor crudo</td>
+<td>12-bit signed (0x0E)</td>
+<td>little-endian</td>
+</tr>
+<tr>
+<td>3–130</td>
+<td>128</td>
+<td>64 píxeles crudos</td>
+<td>12-bit signed (0x80–0xFF)</td>
+<td>little-endian (2 B por píxel)</td>
+</tr>
+<tr>
+<td>131–132</td>
+<td>2</td>
+<td>Batería</td>
+<td>mV (uint16)</td>
+<td><strong>big-endian</strong></td>
+</tr>
+<tr>
+<td>133</td>
+<td>1</td>
+<td><strong>SF actual</strong> (v2.1)</td>
+<td>7..9</td>
+<td>—</td>
+</tr>
+<tr>
+<td>134–135</td>
+<td>2</td>
+<td><strong>Intervalo</strong> (v2.1)</td>
+<td>minutos (uint16)</td>
+<td><strong>big-endian</strong></td>
+</tr>
+<tr>
+<td>136–137</td>
+<td>2</td>
+<td><strong>RSSI último downlink</strong> (v2.1)</td>
+<td>dBm (int16) · <code>0x8000</code> = no disponible</td>
+<td><strong>big-endian</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="82-payload-compacto-16-b-sf8sf9">8.2 Payload compacto — 16 B (SF8/SF9)</h3>
+<table>
+<thead>
+<tr>
+<th>Byte(s)</th>
+<th>Longitud</th>
+<th>Campo</th>
+<th>Formato</th>
+<th>Endianidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>Versión/estado</td>
+<td><code>0x11</code> OK · <code>0x91</code> fallo (bit 0x10 = compacto)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1–2</td>
+<td>2</td>
+<td>Termistor crudo</td>
+<td>12-bit signed</td>
+<td>little-endian</td>
+</tr>
+<tr>
+<td>3–4</td>
+<td>2</td>
+<td>Píxel <strong>MIN</strong></td>
+<td>12-bit</td>
+<td>little-endian</td>
+</tr>
+<tr>
+<td>5–6</td>
+<td>2</td>
+<td>Píxel <strong>MAX</strong></td>
+<td>12-bit</td>
+<td>little-endian</td>
+</tr>
+<tr>
+<td>7–8</td>
+<td>2</td>
+<td>Píxel <strong>PROMEDIO</strong></td>
+<td>uint16 = suma/64</td>
+<td>little-endian</td>
+</tr>
+<tr>
+<td>9–10</td>
+<td>2</td>
+<td>Batería</td>
+<td>mV (uint16)</td>
+<td><strong>big-endian</strong></td>
+</tr>
+<tr>
+<td>11</td>
+<td>1</td>
+<td><strong>Eco SF actual</strong></td>
+<td>7..9</td>
+<td>—</td>
+</tr>
+<tr>
+<td>12–13</td>
+<td>2</td>
+<td><strong>Eco intervalo</strong></td>
+<td>minutos (uint16)</td>
+<td><strong>big-endian</strong></td>
+</tr>
+<tr>
+<td>14–15</td>
+<td>2</td>
+<td><strong>RSSI último downlink</strong> (v2.1)</td>
+<td>dBm (int16) · <code>0x8000</code> = no disponible</td>
+<td><strong>big-endian</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Nota sobre RSSI (v2.1)</strong>: el valor es el <strong>RSSI del último downlink recibido</strong>,
+leído con <code>radio.getRSSI()</code> (negativo en dBm). Si el nodo <strong>aún no ha recibido
+ningún downlink</strong>, el campo vale <code>0x8000</code> (−32768) y el <code>decoder.js</code> lo reporta
+como <code>rssi_dBm: null</code>.</p>
+</blockquote>
+<h3 id="83-uplink-sonda-6-b-tras-el-join">8.3 Uplink sonda — 6 B (tras el join)</h3>
+<table>
+<thead>
+<tr>
+<th>Byte(s)</th>
+<th>Longitud</th>
+<th>Campo</th>
+<th>Endianidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>Versión <code>0x02</code> (sonda DR)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>1–2</td>
+<td>2</td>
+<td>Batería mV</td>
+<td><strong>big-endian</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>SF solicitado</td>
+<td>—</td>
+</tr>
+<tr>
+<td>4–5</td>
+<td>2</td>
+<td>Intervalo en minutos</td>
+<td><strong>big-endian</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="84-conversion-de-temperatura">8.4 Conversión de temperatura</h3>
+<table>
+<thead>
+<tr>
+<th>Registro</th>
+<th>Resolución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Termistor (0x0E)</td>
+<td><code>T_C = valor12bit × 0.0625 °C</code></td>
+</tr>
+<tr>
+<td>Píxeles (0x80–0xFF)</td>
+<td><code>T_C = valor12bit × 0.25 °C</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="85-comandos-downlink-whitelist">8.5 Comandos downlink (whitelist)</h3>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Bytes</th>
+<th>Rango</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SF/DR</td>
+<td><code>0x01 &lt;sf&gt;</code></td>
+<td>7..9</td>
+<td><code>setADR(false)</code> + <code>setDatarate(drFromSf(sf))</code> + persistir</td>
+</tr>
+<tr>
+<td>Intervalo</td>
+<td><code>0x02 &lt;hi&gt; &lt;lo&gt;</code></td>
+<td>1..1440 (uint16 BE)</td>
+<td>aplicar y persistir</td>
+</tr>
+<tr>
+<td>Consulta RSSI</td>
+<td><code>0x03 0x00</code></td>
+<td>—</td>
+<td>reportar RSSI del último downlink en el próximo uplink</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><code>drFromSf()</code>: SF12→DR0, SF11→DR1, SF10→DR2, SF9→DR3, SF8→DR4, SF7→DR5.</p>
+</blockquote>
+<hr/>
+<h2 id="9-instrucciones-de-compilacion-y-carga">9. Instrucciones de compilación y carga</h2>
+<h3 id="91-requisitos">9.1 Requisitos</h3>
+<ol>
+<li><strong>Arduino CLI</strong> instalado.</li>
+<li><strong>Core CubeCell</strong> (paquete <code>CubeCell</code>) con soporte del board <code>CubeCell_AB02A</code>.</li>
+<li><strong>RadioLib 7.7.1</strong> instalada en <code>~/Arduino/libraries/RadioLib</code>.</li>
+<li>Archivo <code>credentials.h</code> creado a partir de <code>credentials.example.h</code>.</li>
+</ol>
+<h3 id="92-compilar">9.2 Compilar</h3>
+<pre><code class="language-bash">arduino-cli compile --fqbn CubeCell:CubeCell:CubeCell_AB02A .
+</code></pre>
+<h3 id="93-transferir-a-la-placa">9.3 Transferir a la placa</h3>
+<pre><code class="language-bash">arduino-cli upload -p /dev/ttyUSB0 --fqbn CubeCell:CubeCell:CubeCell_AB02A .
+</code></pre>
+<h3 id="94-monitor-serial-depuracion">9.4 Monitor serial (depuración)</h3>
+<pre><code class="language-bash">arduino-cli monitor -p /dev/ttyUSB0 -c baudrate=115200
+</code></pre>
+<blockquote>
+<p>Ajusta <code>-p /dev/ttyUSB0</code> al puerto real de tu sistema (<code>ls /dev/ttyUSB*</code>).</p>
+</blockquote>
+<hr/>
+<h2 id="10-ejemplos-de-uso-salida-del-monitor-serial">10. Ejemplos de uso (salida del monitor serial)</h2>
+<h3 id="101-arranque-y-join">10.1 Arranque y join</h3>
+<pre><code>[INIT] HTCC-AB02A + AMG8833 nodo v2.1 (RadioLib) — AU915 SB2
+[INIT] DevEUI=70B3D56F27CEE98B JoinEUI=24E124C0002ADD01
+[CFG] EEPROM: sf=7 interval=1 min
+[INIT] Radio OK
+[INIT] Node OK
+[INIT] scanGuard=200 ms
+[JOIN] Iniciando OTAA (AU915 SB2)...
+[JOIN] +++ JOINED +++
+[DR] setDatarate(5)=0 maxPayload=238 B
+[INIT] Ciclo de 1 min (60000 ms). Listo.
+</code></pre>
+<h3 id="102-uplink-sonda-reporte-completo-sf7">10.2 Uplink sonda + reporte completo (SF7)</h3>
+<pre><code>[PROBE] uplink sonda port=1 payload=02 0E E0 07 00 01 (6 B)
+[DR] tras sonda maxPayload=238 B (requerido 138 B)
+[DR] DR confirmada, payload de 138 B habilitado
+[AMG] Wire.begin=OK
+[AMG] init OK addr=0x69
+[AMG] OK therm=0x0A1B pixels[0]=0x0120
+[BATT] 3580 mV
+[UPLINK] port=1 len=138 payload=01 1B 0A 20 01 ... 07 00 01 80 00 (sf=7 max=238 B)
+[UPLINK] OK (sin downlink)
+[SLEEP] Durmiendo 60000 ms (1 min)...
+</code></pre>
+<blockquote>
+<p>En este primer reporte el campo RSSI vale <code>0x8000</code> (<code>80 00</code>, "no disponible")
+porque todavía no se ha recibido ningún downlink.</p>
+</blockquote>
+<h3 id="103-recibir-downlink-de-cambio-de-sf-0x01-0x08">10.3 Recibir downlink de cambio de SF (0x01 0x08)</h3>
+<pre><code>[UPLINK] port=1 len=138 payload=01 ... 07 00 01 80 00 (sf=7 max=238 B)
+[RX] 2 bytes: 01 08 (RSSI=-68 dBm)
+[DL] SF cambiado a 8 (DR4, maxPayload=125 B)
+[CFG] EEPROM guardada: sf=8 interval=1 min
+[SLEEP] Durmiendo 60000 ms (1 min)...
+</code></pre>
+<h3 id="104-reporte-compacto-tras-el-cambio-sf8">10.4 Reporte compacto tras el cambio (SF8)</h3>
+<pre><code>[AMG] OK therm=0x0A1B pixels[0]=0x0120
+[BATT] 3580 mV
+[UPLINK] port=1 len=16 payload=11 1B 0A 10 01 E2 03 A5 03 0D FC 08 00 01 FF BC (sf=8 max=125 B)
+[UPLINK] OK (sin downlink)
+</code></pre>
+<blockquote>
+<p>En el compacto, los bytes finales son: <code>08</code> (SF), <code>00 01</code> (intervalo 1 min) y
+<code>FF BC</code> (RSSI = −68 dBm, capturado del downlink anterior).</p>
+</blockquote>
+<h3 id="105-recibir-downlink-de-cambio-de-intervalo-0x02-0x00-0x05">10.5 Recibir downlink de cambio de intervalo (0x02 0x00 0x05)</h3>
+<pre><code>[UPLINK] port=1 len=16 payload=11 ... 08 00 01 FF BC (sf=8 max=125 B)
+[RX] 3 bytes: 02 00 05 (RSSI=-70 dBm)
+[DL] Intervalo cambiado a 5 min
+[CFG] EEPROM guardada: sf=8 interval=5 min
+[SLEEP] Durmiendo 300000 ms (5 min)...
+</code></pre>
+<h3 id="106-recibir-downlink-de-consulta-rssi-0x03-0x00">10.6 Recibir downlink de consulta RSSI (0x03 0x00)</h3>
+<pre><code>[UPLINK] port=1 len=16 payload=11 ... 08 00 05 FF BA (sf=8 max=125 B)
+[RX] 2 bytes: 03 00 (RSSI=-70 dBm)
+[DL] Consulta RSSI recibida: RSSI=-70 dBm (se reportará en el próximo uplink)
+</code></pre>
+<h3 id="107-downlink-desconocido-ignorado">10.7 Downlink desconocido (ignorado)</h3>
+<pre><code>[RX] 2 bytes: 04 FF
+[DL] Comando 0x04 desconocido; ignorado
+</code></pre>
+<h3 id="108-paquetes-reales-capturados-en-el-gateway-milesight-ug56">10.8 Paquetes reales capturados en el gateway (Milesight UG56)</h3>
+<p>Estos son dos uplinks <strong>reales</strong> capturados en producción, que muestran la
+telemetría v2.1 funcionando. Consulta <code>INTERPRETACION_PAQUETES.md</code> para el
+desglose byte a byte de estos mismos paquetes.</p>
+<p><strong>Caso A — uplink completo SIN downlink previo (Fcnt 875):</strong></p>
+<pre><code class="language-json">{
+  "kind": "full",
+  "version": 1,
+  "sensor_ok": true,
+  "sf": 7,
+  "interval_min": 1,
+  "rssi_dBm": null,        // ← aún no hubo downlink (0x8000)
+  "battery_mV": 3328,
+  "battery_V": 3.33,
+  "thermistor_C": 24.25,
+  "pixel_min_C": 17.5,
+  "pixel_max_C": 24.5,
+  "rssi": -40,             // ← RSSI medido por el GATEWAY (siempre presente)
+  "snr": 13.5
+}
+</code></pre>
+<blockquote>
+<p>El payload hex termina en <code>... 0D 00 07 00 01 80 00</code>: batería <code>0x0D00</code> (3328 mV),
+SF <code>07</code>, intervalo <code>00 01</code> (1 min) y RSSI <code>80 00</code> (<code>0x8000</code> → <code>null</code>).</p>
+</blockquote>
+<p><strong>Caso B — uplink completo TRAS el comando <code>03 00</code> (Fcnt 878):</strong></p>
+<pre><code class="language-json">{
+  "kind": "full",
+  "version": 1,
+  "sensor_ok": true,
+  "sf": 7,
+  "interval_min": 1,
+  "rssi_dBm": -20,         // ← ahora reporta un valor real tras el downlink
+  "battery_mV": 3328,
+  "battery_V": 3.33,
+  "thermistor_C": 22.44,
+  "pixel_min_C": 15.5,
+  "pixel_max_C": 20.25,
+  "rssi": -44,
+  "snr": 10.0
+}
+</code></pre>
+<blockquote>
+<p>El payload hex termina en <code>... 0D 00 07 00 01 FF EC</code>: RSSI <code>FF EC</code> = <code>-20</code> dBm
+(int16 big-endian). Es la señal con la que <strong>el nodo</strong> recibió el downlink del
+gateway — un enlace excelente (−20 dBm).</p>
+</blockquote>
+<p><strong>Lectura de la secuencia de eventos (clase A):</strong></p>
+<pre><code>Time       Type   Fcnt  Size  DR         RSSI/SNR   Nota
+20:03:16   UpUnc  875   138   SF7 BW125  -40/13.5   Uplink (rssi_dBm=null)
+20:03:16   DnUnc  1     2     SF7 BW500  -/-        ← comando 03 00 (consulta RSSI)
+20:06:24   UpUnc  878   138   SF7 BW125  -44/10.0   Uplink (rssi_dBm=-20) ← respuesta
+</code></pre>
+<p>Observa cómo el <code>DnUnc</code> (comando) se entrega justo tras un <code>UpUnc</code>, y el siguiente
+uplink ya reporta el <code>rssi_dBm</code> medido. Este es el comportamiento esperado de un
+nodo de <strong>clase A</strong>.</p>
+<hr/>
+<h2 id="11-advertencias-y-precauciones">11. Advertencias y precauciones</h2>
+<ul>
+<li><strong>Polaridad del sensor VEXT</strong>: en esta placa el pad <code>VEXT</code> (P3_2) está
+  <strong>invertido</strong>: <code>HIGH = ON</code>, <code>LOW = OFF</code>. No lo conectes con la lógica contraria
+  o el sensor quedará alimentado permanentemente (agotando la pila).</li>
+<li><strong>Polaridad de la pila</strong>: la pila Li-SOCl₂ 14250 (1/2AA) tiene polaridad
+  invertida respecto a una AA común (el positivo suele ir en el extremo
+  plano/rosca). Respeta el marcado del portapilas del CubeCell.</li>
+<li><strong>No forzar SF ≥ 10</strong>: el dwell time de AU915 (400 ms) lo impide y el valor
+  persistido dejaría el nodo sin uplink. El firmware ya lo limita a 7..9.</li>
+<li><strong>Duty cycle / time-on-air</strong>: en clase A el downlink solo llega justo tras un
+  uplink. Si el intervalo es muy largo (p. ej. 24 h), un comando downlink tardará
+  hasta un ciclo completo en aplicarse.</li>
+<li><strong>Credenciales secretas</strong>: nunca versiones ni publiques <code>credentials.h</code>. Usa
+  <code>credentials.example.h</code> como plantilla. El archivo ya está en <code>.gitignore</code>.</li>
+<li><strong>DevNonce tras power-cycle real</strong>: este firmware no persiste DevNonce/sesión
+  en flash; tras un corte de alimentación real (no deep sleep, que SÍ retiene
+  SRAM) el nodo re-joinea con <code>DevNonce = 0</code>. Asegúrate de que el NS Milesight
+  acepte DevNonce reutilizado (mismo comportamiento que la v1, verificado).</li>
+<li><strong>Bug core CubeCell (I2C + deep sleep)</strong>: el firmware ya mitiga el bug llamando
+  a <code>Wire.end()</code> antes de cada <code>Wire.begin()</code>. No elimines esa secuencia.</li>
+<li><strong>Sub-banda</strong>: configura la <strong>sub-banda 2</strong> tanto en el gateway como en el NS,
+  o el join/uplink fallará.</li>
+<li><strong>ADR OFF</strong>: el nodo desactiva ADR tras cada join; la DR se controla de forma
+  explícita (por configuración o por downlink).</li>
+</ul>
+<hr/>
+<h2 id="12-estructura-de-archivos">12. Estructura de archivos</h2>
+<pre><code>HTCC_AB02A_AMG8833_Thermal_v2/
+├── HTCC_AB02A_AMG8833_Thermal_v2.ino   ← sketch principal
+├── credentials.h                        ← credenciales reales (NO versionar)
+├── credentials.example.h                ← plantilla pública
+├── decoder.js                           ← Decode + Encode para el NS
+├── INTERPRETACION_PAQUETES.md           ← guía de lectura de paquetes (v2.1)
+├── Comandos_Downlink_HTCC-AB02A_AMG8833_v2.md  ← guía rápida de comandos
+├── .gitignore                           ← excluye credentials.h, PLAN, audit…
+├── PLAN.md                              ← plan técnico (no versionar)
+├── AUDIT_REPORT.md                      ← informe de auditoría (no versionar)
+├── README.md                            ← este documento
+└── docs/
+    ├── datasheet.md                     ← documentación de usuario
+    └── developer.md                     ← explicación del código fuente
+</code></pre>
+<hr/>
+<h2 id="13-documentacion-adicional">13. Documentación adicional</h2>
+<ul>
+<li><strong><code>docs/datasheet.md</code></strong> — guía de usuario, especificaciones técnicas,
+  configuración del NS y solución de problemas.</li>
+<li><strong><code>docs/developer.md</code></strong> — explicación del código fuente, arquitectura, máquina
+  de estados y guía de extensión.</li>
+<li><strong><code>INTERPRETACION_PAQUETES.md</code></strong> — cómo leer e interpretar los paquetes
+  LoRaWAN del nodo (uplink/downlink), con la explicación de los dos RSSI y
+  ejemplos reales capturados del gateway.</li>
+<li><strong><code>Comandos_Downlink_HTCC-AB02A_AMG8833_v2.md</code></strong> — guía rápida de los comandos
+  downlink (cambiar SF, ciclo de reporte y consultar RSSI).</li>
+</ul></div></div></section>
+<section class="section tight"><div class="wrap"><div class="section-head reveal"><div class="kicker">Lo que no funcionó</div><h2>Los tropiezos, documentados</h2><p class="section-sub">Las primeras versiones existen para que estos errores no se repitan: cada una dejó una decisión de diseño verificable.</p></div><div class="fail-grid reveal"><div class="fail"><div class="v">HTCC_AB02A_AMG8833_Thermal</div><h3>I2C mudo tras el deep sleep</h3><p>Tras dormir, Wire.begin() no reinicializaba el periférico porque el flag I2C_initVar queda retenido en SRAM. El sensor respondía solo en el primer ciclo después del reset y fallaba en los siguientes. Se corrigió llamando a Wire.end() antes de Wire.begin() en cada lectura, patrón que el proyecto marca como obligatorio.</p></div><div class="fail"><div class="v">HTCC_AB02A_AMG8833_Thermal_Acelerometro</div><h3>Acelerómetro sin cablear y ADC flotante</h3><p>La variante que sumaba un ADXL335 quedó detenida entre un nodo con dos sensores y dos nodos separados. El GY-61 no estaba cableado y la entrada ADC flotaba, así que los valores leídos no eran reales. No se hicieron más pruebas físicas hasta resolver el diseño.</p></div><div class="fail"><div class="v">HTCC_AB02A_AMG8833_Thermal</div><h3>Payload fijo que no cabe en SF8</h3><p>La primera versión fijaba DR5 y 133 bytes para asegurar un único uplink; con enlace marginal había pérdidas y no podía bajar de SF7. La v2 añadió un payload compacto de 16 bytes para SF8 y SF9, manteniendo el completo solo cuando el data rate lo admite.</p></div></div></div></section><section class="section tight"><div class="wrap"><div class="section-head reveal"><div class="kicker">Ficha de evaluación</div><h2>Cómo se mide este proyecto</h2><p class="section-sub">Seis criterios con la misma escala en todo el catálogo, para comparar sin marketing.</p></div><div class="rating-head reveal"><div class="rating-avg">4.0<small>/5</small></div><div><strong>Madurez global</strong><p>Nodo térmico de bajo consumo con reconfiguración remota y documentación sólida; la variante con acelerómetro quedó inconclusa y el conjunto sigue siendo prototipo de campo.</p></div></div><div class="rating reveal"><div class="rating-row"><div class="rating-name">Madurez</div><div class="rating-bar"><i style="width:80%"></i></div><div class="rating-score">4/5</div><div class="rating-note">v2.1 validada en campo, con EEPROM, telemetría y payload adaptativo; sin tests automatizados ni batería cuantificada en campaña.</div></div><div class="rating-row"><div class="rating-name">Reproducibilidad</div><div class="rating-bar"><i style="width:60%"></i></div><div class="rating-score">3/5</div><div class="rating-note">Depende de HTCC-AB02A, pila Li-SOCl2, gateway UG56 y credenciales; el FQBN y el core están fijados.</div></div><div class="rating-row"><div class="rating-name">Documentación</div><div class="rating-bar"><i style="width:100%"></i></div><div class="rating-score">5/5</div><div class="rating-note">README, datasheet y developer describen comandos, bytes, consumo y el bug de I2C con detalle.</div></div><div class="rating-row"><div class="rating-name">Honestidad de límites</div><div class="rating-bar"><i style="width:100%"></i></div><div class="rating-score">5/5</div><div class="rating-note">Expone ADR desactivado, polaridad de VEXT, límites de payload y el bug del core sin ocultarlos.</div></div><div class="rating-row"><div class="rating-name">Valor demostrativo</div><div class="rating-bar"><i style="width:80%"></i></div><div class="rating-score">4/5</div><div class="rating-note">Integra termografía de 8x8, bajo consumo y configuración remota en un nodo autónomo.</div></div><div class="rating-row"><div class="rating-name">Facilidad de despliegue</div><div class="rating-bar"><i style="width:60%"></i></div><div class="rating-score">3/5</div><div class="rating-note">Requiere toolchain CubeCell, gateway y edición de credenciales; el procedimiento está documentado, no automatizado.</div></div></div></div></section><section class="section tight"><div class="wrap"><div class="section-head reveal"><div class="kicker">Preguntas típicas</div><h2>Lo que suelen preguntar</h2></div><div class="faq reveal"><details><summary>¿Qué placa conviene?</summary><p>AB02A para bajo consumo; AB01 si ya tenés esa placa y querés persistencia de sesión.</p></details><details><summary>¿Cuánto pesa el payload?</summary><p>La matriz 8x8 se comprime; el formato exacto está en el developer de la versión.</p></details><details><summary>¿Por qué falla el join?</summary><p>Región, claves o cobertura. La telemetría incluye RSSI para distinguir cobertura de configuración.</p></details><details><summary>¿Se puede leer a distancia?</summary><p>Sí, el AMG8833 mide temperatura de superficie sin contacto, pero tiene un campo de visión estrecho.</p></details><details><summary>¿El comando 0x03 es seguro?</summary><p>Valida rangos antes de aplicar. Aun así, probalo primero en un nodo de laboratorio.</p></details></div></div></section>
 <section class="cta"><div class="wrap"><div class="cta-box reveal">
   <div class="kicker">Siguiente paso</div><h2>¿Te animás?</h2>
   <p>Usá esta familia como base para htcc amg8833. Está documentada para que puedas entenderla, ejecutarla y continuarla sin adivinar.</p>

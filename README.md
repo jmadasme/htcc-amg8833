@@ -35,6 +35,60 @@ cd htcc-amg8833/versions/HTCC_AB02A_AMG8833_Thermal_v2
 
 El sensor AMG8833 y la placa no se incluyen. El downlink 0x03 está documentado en el datasheet de la versión v2.
 
+<!-- ficha -->
+## Ficha de evaluación
+
+**Madurez global: 4.0/5**
+
+| Criterio | Nota | Evidencia |
+|---|---:|---|
+| Madurez | 4/5 | v2.1 validada en campo, con EEPROM, telemetría y payload adaptativo; sin tests automatizados ni batería cuantificada en campaña. |
+| Reproducibilidad | 3/5 | Depende de HTCC-AB02A, pila Li-SOCl2, gateway UG56 y credenciales; el FQBN y el core están fijados. |
+| Documentación | 5/5 | README, datasheet y developer describen comandos, bytes, consumo y el bug de I2C con detalle. |
+| Honestidad de límites | 5/5 | Expone ADR desactivado, polaridad de VEXT, límites de payload y el bug del core sin ocultarlos. |
+| Valor demostrativo | 4/5 | Integra termografía de 8x8, bajo consumo y configuración remota en un nodo autónomo. |
+| Facilidad de despliegue | 3/5 | Requiere toolchain CubeCell, gateway y edición de credenciales; el procedimiento está documentado, no automatizado. |
+
+Nodo térmico de bajo consumo con reconfiguración remota y documentación sólida; la variante con acelerómetro quedó inconclusa y el conjunto sigue siendo prototipo de campo.
+
+## Lo que no funcionó
+
+### HTCC_AB02A_AMG8833_Thermal — I2C mudo tras el deep sleep
+
+Tras dormir, Wire.begin() no reinicializaba el periférico porque el flag I2C_initVar queda retenido en SRAM. El sensor respondía solo en el primer ciclo después del reset y fallaba en los siguientes. Se corrigió llamando a Wire.end() antes de Wire.begin() en cada lectura, patrón que el proyecto marca como obligatorio.
+
+### HTCC_AB02A_AMG8833_Thermal_Acelerometro — Acelerómetro sin cablear y ADC flotante
+
+La variante que sumaba un ADXL335 quedó detenida entre un nodo con dos sensores y dos nodos separados. El GY-61 no estaba cableado y la entrada ADC flotaba, así que los valores leídos no eran reales. No se hicieron más pruebas físicas hasta resolver el diseño.
+
+### HTCC_AB02A_AMG8833_Thermal — Payload fijo que no cabe en SF8
+
+La primera versión fijaba DR5 y 133 bytes para asegurar un único uplink; con enlace marginal había pérdidas y no podía bajar de SF7. La v2 añadió un payload compacto de 16 bytes para SF8 y SF9, manteniendo el completo solo cuando el data rate lo admite.
+
+## Preguntas típicas
+
+**¿Qué placa conviene?**
+
+AB02A para bajo consumo; AB01 si ya tenés esa placa y querés persistencia de sesión.
+
+**¿Cuánto pesa el payload?**
+
+La matriz 8x8 se comprime; el formato exacto está en el developer de la versión.
+
+**¿Por qué falla el join?**
+
+Región, claves o cobertura. La telemetría incluye RSSI para distinguir cobertura de configuración.
+
+**¿Se puede leer a distancia?**
+
+Sí, el AMG8833 mide temperatura de superficie sin contacto, pero tiene un campo de visión estrecho.
+
+**¿El comando 0x03 es seguro?**
+
+Valida rangos antes de aplicar. Aun así, probalo primero en un nodo de laboratorio.
+
+<!-- /ficha -->
+
 ## Documentación
 
 - [`docs/datasheet.md`](docs/datasheet.md) — instalación, operación y límites.
@@ -42,9 +96,9 @@ El sensor AMG8833 y la placa no se incluyen. El downlink 0x03 está documentado 
 - [`docs/REFERENCES.md`](docs/REFERENCES.md) — estándares, librerías y fuentes.
 - [`docs/index.html`](docs/index.html) — página del proyecto (GitHub Pages).
 
-## Alcance y honestidad
+## El proyecto en detalle
 
-## HTCC_AB02A + AMG8833 — Nodo LoRaWAN Low-Power con control por downlink (v2.1)
+### HTCC_AB02A + AMG8833 — Nodo LoRaWAN Low-Power con control por downlink (v2.1)
 
 Nodo LoRaWAN de **clase A** construido sobre una **Heltec CubeCell HTCC-AB02A**
 ("CubeCell 1/2AA Node") que integra una **termocámara Panasonic AMG8833 (8×8)**
