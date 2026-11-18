@@ -205,12 +205,14 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
 
 </style>
 <link rel="stylesheet" href="assets/community.css?v=1">
+<link href="rec/player.css?v=1" rel="stylesheet"/>
 </head>
 <body>
 <header class="nav"><div class="wrap nav-in">
   <a class="brand" href="/"><span class="brand-mark"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5-9 5-9-5 9-5z"/><path d="m3 12 9 5 9-5M3 17l9 5 9-5"/></svg></span><span>jmadasme<span style="color:var(--accent)">.</span>portfolio</span></a>
   <nav class="nav-links">
-    <a href="#proyecto">Proyecto</a><a href="#versiones">Versiones</a><a href="#stack">Stack</a><a href="#docs">Docs</a><a href="#comunidad">Comunidad</a>
+    <a href="#proyecto">Proyecto</a><a href="#versiones">Versiones</a><a href="#stack">Stack</a><a href="#video">Video</a>
+<a href="#docs">Docs</a><a href="#comunidad">Comunidad</a>
     <a class="btn btn-ghost" style="padding:9px 15px" href="/iot/">← IoT</a>
   </nav>
 </div></header>
@@ -242,6 +244,45 @@ h2{font-size:clamp(30px,4vw,46px);line-height:1.05;letter-spacing:-.04em;margin:
     <div class="card reveal"><span class="tag">Solución</span><h3>La propuesta</h3><p>Persistir la sesión LoRaWAN, exponer el intervalo y el SF por downlink y devolver RSSI para diagnosticar el enlace sin acceso físico.</p></div>
   </div>
 </div></section>
+
+
+<section class="section tight rec-section" id="video" style="--accent:#2E7DFF;--accent2:#14F195">
+<div class="wrap">
+<div class="rec-kicker">REC · VIDEO · 3:16</div>
+<h2 class="rec-h2">Termocámara 8x8 sobre LoRaWAN</h2>
+<p class="rec-lead">Una Heltec CubeCell HTCC-AB02A lee una termocámara AMG8833 de 8x8, arma un payload de 138 bytes en SF7 o uno compacto de 16 bytes en SF8-SF9, y duerme entre reportes. El video recorre el encendido de VEXT, el workaround de I2C tras deep sleep, los comandos downlink de SF e intervalo, la sonda de DR y los decodificadores JavaScript y Python del repositorio.</p>
+<div class="rec-banner">
+<span class="rec-banner-icon">📋</span>
+<strong>Puedes copiar y pegar los comandos del video desde el video !!!</strong>
+<span>Pausá, seleccioná el texto de la terminal y copiá.</span>
+</div>
+<div class="rec-shell">
+<div class="rec-bar"><i></i><i></i><i></i><span class="rec-title">Termocámara 8x8 sobre LoRaWAN · asciinema</span><span class="rec-rec"><b></b>REC</span></div>
+<div class="rec-screen-wrap">
+<div class="rec-screen" id="rec-screen"></div>
+<div class="rec-poster" id="rec-poster">
+<div class="rec-kicker">ASCIINEMA · 3:16</div>
+<h3>Termocámara 8x8 sobre LoRaWAN</h3>
+<p>Una Heltec CubeCell HTCC-AB02A lee una termocámara AMG8833 de 8x8, arma un payload de 138 bytes en SF7 o uno compacto de 16 bytes en SF8-SF9, y duerme entre reportes. El video recorre el encendido de VEXT, el workaround de I2C tras deep sleep, los comandos downlink de SF e intervalo, la sonda de DR y los decodificadores JavaScript y Python del repositorio.</p>
+<div class="rec-poster-meta">htcc-amg8833 · código real</div>
+<button class="rec-btn rec-primary" id="rec-start" type="button">▶ Reproducir</button>
+</div>
+</div>
+<div class="rec-controls">
+<button class="rec-btn rec-primary" id="rec-play" type="button">▶ Reproducir</button>
+<button class="rec-btn" id="rec-restart" type="button">↺ Reiniciar</button>
+<input class="rec-progress" id="rec-range" type="range" min="0" max="1000" value="0" aria-label="Progreso"/>
+<span class="rec-time" id="rec-time">0:00 / 3:16</span>
+<select class="rec-speed" id="rec-speed" aria-label="Velocidad"><option value="1">1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select>
+<button class="rec-btn" id="rec-full" type="button" title="Pantalla completa">⛶</button>
+<button class="rec-btn" id="rec-copy" type="button">⧉ Copiar comandos</button>
+<a class="rec-download" href="rec/htcc-amg8833.cast" download>descargar .cast</a>
+</div>
+</div>
+<p class="rec-note">El sketch y los decodificadores son reales; las credenciales deben completarse fuera del repositorio.</p>
+<div class="rec-chapters"><span class="rec-chip"><b>0:06</b> EL PROBLEMA</span><span class="rec-chip"><b>0:20</b> HARDWARE</span><span class="rec-chip"><b>0:33</b> HARDWARE</span><span class="rec-chip"><b>0:48</b> PAYLOAD</span><span class="rec-chip"><b>1:03</b> LECTURA</span><span class="rec-chip"><b>1:18</b> PAYLOAD</span><span class="rec-chip"><b>1:36</b> DOWNLINK</span><span class="rec-chip"><b>1:52</b> CICLO</span><span class="rec-chip"><b>2:08</b> DECODIFICADOR JS</span><span class="rec-chip"><b>2:23</b> DECODIFICADOR PY</span><span class="rec-chip"><b>2:38</b> MONITOR</span><span class="rec-chip"><b>2:53</b> CÓMO EJECUTARLO</span></div>
+</div>
+</section>
 
 <section class="section" id="versiones"><div class="wrap">
   <div class="section-head reveal"><div class="kicker">02 — Versiones</div><h2>La historia, completa.</h2><p class="section-sub">Cada carpeta conserva una etapa del proyecto. No se borraron las anteriores: se pusieron en contexto.</p></div>
@@ -1394,5 +1435,7 @@ nodo de <strong>clase A</strong>.</p>
 <script>window.PORTFOLIO_COMMUNITY={account:"jmadasme",repo:"htcc-amg8833",coinNamespace:"jmadasme-htcc-amg8833-coins-v1",faqs:[{"q": "¿Qué placa conviene?", "a": "AB02A para bajo consumo; AB01 si ya tenés esa placa y querés persistencia de sesión."}, {"q": "¿Cuánto pesa el payload?", "a": "La matriz 8x8 se comprime; el formato exacto está en el developer de la versión."}, {"q": "¿Por qué falla el join?", "a": "Región, claves o cobertura. La telemetría incluye RSSI para distinguir cobertura de configuración."}, {"q": "¿Se puede leer a distancia?", "a": "Sí, el AMG8833 mide temperatura de superficie sin contacto, pero tiene un campo de visión estrecho."}, {"q": "¿El comando 0x03 es seguro?", "a": "Valida rangos antes de aplicar. Aun así, probalo primero en un nodo de laboratorio."}]};</script>
 <script src="assets/community.js?v=2" defer></script>
 
+<script defer src="rec/htcc-amg8833.cast.js?v=1"></script>
+<script defer src="rec/player.js?v=1"></script>
 </body>
 </html>
